@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apna Aspatal - Your Digital Healthcare</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide-react@latest/dist/lucide-react.js"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            animation: gradientShift 8s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        /* Animations */
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInTop {
+            0% { opacity: 0; transform: translateY(-50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseHover {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes pulse-always {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .pulse-always {
+            animation: pulse-always 2s infinite;
+        }
+        @keyframes ripple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+        .animate-fade-in-scale {
+            animation: fadeInScale 1s ease-out;
+        }
+        .animate-slide-up {
+            animation: slideUp 1s ease-out;
+        }
+        .animate-slide-in-top {
+            animation: slideInTop 0.8s ease-out;
+        }
+        .animate-stagger {
+            animation: fadeInScale 1s ease-out;
+        }
+        .animate-stagger:nth-child(1) { animation-delay: 0.1s; }
+        .animate-stagger:nth-child(2) { animation-delay: 0.2s; }
+        .animate-stagger:nth-child(3) { animation-delay: 0.3s; }
+        .animate-stagger:nth-child(4) { animation-delay: 0.4s; }
+        .animate-stagger:nth-child(5) { animation-delay: 0.5s; }
+        .animate-stagger:nth-child(6) { animation-delay: 0.6s; }
+        .animate-stagger:nth-child(7) { animation-delay: 0.7s; }
+        .animate-stagger:nth-child(8) { animation-delay: 0.8s; }
+        .animate-stagger:nth-child(9) { animation-delay: 0.9s; }
+        .animate-stagger:nth-child(10) { animation-delay: 1s; }
+        .pulse-hover:hover {
+            animation: pulseHover 0.6s ease-in-out;
+        }
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .ripple:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-label {
+            position: absolute;
+            top: 50%;
+            left: 40px;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .input-group input:focus + .input-label,
+        .input-group input:not(:placeholder-shown) + .input-label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            color: #00A79D;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .animate-fade-in-scale,
+            .animate-slide-up,
+            .animate-slide-in-top,
+            .animate-stagger,
+            .pulse-hover:hover,
+            .gradient-bg {
+                animation: none;
+            }
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #00A79D, #29D9C8);
+            position: relative;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://placehold.co/1920x1080/ffffff/ffffff?text=');
+            background-size: cover;
+            opacity: 0.1;
+            background-position: center;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        /* Dark mode styles */
+        .dark .bg-gray-100 { background-color: #1f2937; }
+        .dark .bg-white { background-color: #374151; }
+        .dark .text-gray-800 { color: #f9fafb; }
+        .dark .text-gray-600 { color: #d1d5db; }
+        .dark .text-gray-500 { color: #9ca3af; }
+        .dark .border-gray-200 { border-color: #4b5563; }
+        .dark .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2); }
+        .dark .placeholder-gray-400::placeholder { color: #9ca3af; }
+        .dark .toggle-label { background-color: #4b5563; }
+        .toggle-label {
+            transition: background-color 0.2s ease-in;
+        }
+        .toggle-checkbox {
+            transition: transform 0.2s ease-in;
+        }
+        #toggle:checked {
+            transform: translateX(1rem);
+        }
+        #toggle:checked + .toggle-label {
+            background-color: #00A79D;
+        }
+        #login-toggle:checked {
+            transform: translateX(1rem);
+        }
+        #login-toggle:checked + .toggle-label {
+            background-color: #00A79D;
+        }
+        .dark #toggle:checked + .toggle-label {
+            background-color: #374151;
+        }
+        .dark #login-toggle:checked + .toggle-label {
+            background-color: #374151;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- ===== LOGIN PAGE ===== -->
+    <div id="loginPage" class="page active">
+        <!-- Nav Bar for Login Page -->
+        <header class="bg-white shadow-md sticky top-0 z-50 animate-slide-in-top">
+            <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2 animate-fade-in-scale">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-500">
+                        <path d="M12 2v20M2 12h20"/>
+                    </svg>
+                    <h1 class="text-xl font-bold text-gray-800">Apna Aspatal</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Language Dropdown -->
+                    <div class="relative">
+                        <select id="login-language-select" class="appearance-none bg-transparent border border-gray-300 rounded-md py-1 px-3 text-gray-600">
+                            <option>English</option>
+                            <option>Hindi</option>
+                        </select>
+                    </div>
+                    <!-- Dark Mode Toggle -->
+                    <div class="dark-mode-toggle flex items-center">
+                        <div id="login-theme-toggle" class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="login-toggle" id="login-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="login-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                    <a href="#" id="contactUsLink" class="text-gray-600 hover:text-teal-500 transition duration-200">Contact Us</a>
+                </div>
+            </nav>
+        </header>
+        <div class="min-h-screen flex items-center justify-center gradient-bg p-4">
+            <div class="bg-white p-8 md:p-10 rounded-2xl shadow-2xl w-full max-w-md text-center animate-slide-up">
+                <div class="flex items-center justify-center mb-6 animate-fade-in-scale">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-500 mr-3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <h1 class="text-3xl font-bold text-gray-800">Apna Aspatal</h1>
+                </div>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-6">Login</h2>
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <form class="space-y-5">
+                        <div class="input-group relative animate-stagger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            <input type="email" id="login-email" placeholder="" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 ease-in-out">
+                            <label class="input-label">Email</label>
+                            <span class="error text-red-500 text-sm mt-1 block" id="login-email-error"></span>
+                        </div>
+                        <div class="input-group relative animate-stagger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <input type="password" id="login-password" placeholder="" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 ease-in-out">
+                            <label class="input-label">Password</label>
+                            <span class="error text-red-500 text-sm mt-1 block" id="login-password-error"></span>
+                        </div>
+                        <select id="login-role" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200 bg-white animate-stagger">
+                            <option>Role: Patient</option>
+                            <option>Role: Doctor</option>
+                            <option>Role: Admin</option>
+                        </select>
+                        <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+                            <button id="loginBtn" type="button" class="w-full sm:w-auto flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 pulse-hover ripple animate-stagger">
+                                LOGIN
+                            </button>
+                            <button id="registerBtn" type="button" class="w-full sm:w-auto flex-1 bg-teal-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-600 transition duration-300 pulse-hover ripple animate-stagger">
+                                REGISTER
+                            </button>
+                        </div>
+                    </form>
+                    <p class="mt-6 text-sm">
+                        <a href="#" id="registerLink" class="text-blue-600 hover:underline">Or Register here</a>
+                    </p>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="hidden">
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-6">Register</h2>
+                    <form class="space-y-5">
+                        <div>
+                            <input type="text" id="register-fullname" placeholder="Full Name" class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 ease-in-out">
+                            <span class="error text-red-500 text-sm mt-1 block" id="register-fullname-error"></span>
+                        </div>
+                        <div class="relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            <input type="email" id="register-email" placeholder="Email" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 ease-in-out">
+                            <span class="error text-red-500 text-sm mt-1 block" id="register-email-error"></span>
+                        </div>
+                        <div class="relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <input type="password" id="register-password" placeholder="Password" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 ease-in-out">
+                            <span class="error text-red-500 text-sm mt-1 block" id="register-password-error"></span>
+                        </div>
+                        <div>
+                            <input type="password" id="register-confirm-password" placeholder="Confirm Password" class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 ease-in-out">
+                            <span class="error text-red-500 text-sm mt-1 block" id="register-confirm-password-error"></span>
+                        </div>
+                        <div>
+                            <input type="tel" id="register-phone" placeholder="Phone Number" class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 ease-in-out">
+                            <span class="error text-red-500 text-sm mt-1 block" id="register-phone-error"></span>
+                        </div>
+                        <select id="register-role" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200 bg-white">
+                            <option>Role: Patient</option>
+                            <option>Role: Doctor</option>
+                            <option>Role: Admin</option>
+                        </select>
+                        <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+                            <button id="backToLoginBtn" type="button" class="w-full sm:w-auto flex-1 bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 transition duration-300">
+                                BACK TO LOGIN
+                            </button>
+                            <button id="registerSubmitBtn" type="button" class="w-full sm:w-auto flex-1 bg-teal-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-600 transition duration-300">
+                                CREATE ACCOUNT
+                            </button>
+                        </div>
+                    </form>
+                    <p class="mt-6 text-sm">
+                        <a href="#" id="loginLink" class="text-blue-600 hover:underline">Already have an account? Login here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN APPLICATION ===== -->
+    <div id="mainApp" class="hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-md sticky top-0 z-50">
+            <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-500">
+                        <path d="M12 2v20M2 12h20"/>
+                    </svg>
+                    <a href="#" class="text-xl font-bold text-gray-800 nav-link" data-page="home">Apna Aspatal</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="home">Home</a>
+                    <a href="#" class="text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="doctorDashboard">Doctors</a>
+                    <a href="#" class="text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="dashboard">Patients</a>
+                    <a href="#" class="text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="pharmacy">Pharmacy</a>
+                    <a href="#" class="text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="lab">Lab Tests</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Language Dropdown -->
+                    <div class="relative">
+                       <select class="appearance-none bg-transparent border border-gray-300 rounded-md py-1 px-3 text-gray-600">
+                           <option>English</option>
+                           <option>Hindi</option>
+                       </select>
+                    </div>
+                    <!-- Dark Mode Toggle -->
+                    <div class="dark-mode-toggle flex items-center">
+                        <div id="theme-toggle" class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                    <button id="logoutBtn" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-blue-700 transition duration-300">LOGOUT</button>
+                </div>
+                 <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </nav>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
+                 <a href="#" class="block text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="home">Home</a>
+                 <a href="#" class="block text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="doctorDashboard">Doctors</a>
+                 <a href="#" class="block text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="dashboard">Patients</a>
+                 <a href="#" class="block text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="pharmacy">Pharmacy</a>
+                 <a href="#" class="block text-gray-600 hover:text-teal-500 transition duration-200 nav-link" data-page="lab">Lab Tests</a>
+                 <a href="#" class="block text-gray-600 hover:text-teal-500 transition duration-200">Contact</a>
+            </div>
+        </header>
+
+        <main>
+            <!-- ===== HOME PAGE CONTENT ===== -->
+            <div id="home" class="page active">
+                <section class="hero-bg text-white">
+                    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 text-center relative z-10">
+                        <h1 class="text-4xl md:text-6xl font-extrabold mb-4">Your Health, Our Priority.</h1>
+                        <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">Apna Aspatal – Your Digital Doorway to Quality Healthcare.</p>
+                        
+                        <div class="bg-white rounded-lg p-4 max-w-4xl mx-auto shadow-lg flex flex-col md:flex-row items-center gap-4">
+                            <select id="search-category" class="w-full md:w-1/4 p-3 border border-gray-200 rounded-lg text-gray-600">
+                                <option value="doctor">Doctor</option>
+                                <option value="specialist">Specialist</option>
+                                <option value="hospital">Hospital</option>
+                            </select>
+                            <input type="text" id="search-input" placeholder="Find a Doctor, Specialist, Hospital" class="w-full md:w-1/2 p-3 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400" list="search-options">
+                            <datalist id="search-options"></datalist>
+                            <button id="search-btn" class="w-full md:w-1/4 bg-blue-600 text-white font-bold p-3 rounded-lg hover:bg-blue-700 transition duration-300 pulse-hover">SEARCH</button>
+                        </div>
+
+                        <!-- Search Results -->
+                        <div id="search-results" class="mt-8 bg-white rounded-lg p-6 max-w-4xl mx-auto shadow-lg hidden">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Search Results</h3>
+                            <div id="results-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                        </div>
+
+                        <div class="mt-10 flex flex-wrap justify-center gap-4">
+                            <button class="bg-teal-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-600 transition duration-300" id="bookAppointmentBtn">BOOK APPOINTMENT</button>
+                            <button class="bg-white text-teal-500 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition duration-300" id="consultOnlineBtn">CONSULT ONLINE</button>
+                            <button class="bg-red-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600 transition duration-300 pulse-always" id="emergencyHelpBtn">EMERGENCY HELP</button>
+                        </div>
+                    </div>
+                </section>
+                <section class="py-16 bg-gray-50 dark:bg-gray-700">
+                    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                            <!-- Service Cards -->
+                            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
+                                <img src="https://placehold.co/600x400/34D399/FFFFFF?text=Doctor+Consultation" alt="Doctor Consultation" class="w-full h-48 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-gray-800">Doctor Consultation</h3>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
+                                <img src="https://placehold.co/600x400/FBBF24/FFFFFF?text=Pharmacy" alt="Pharmacy" class="w-full h-48 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-gray-800">Pharmacy</h3>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
+                                <img src="https://placehold.co/600x400/60A5FA/FFFFFF?text=Diagnostics" alt="Diagnostics" class="w-full h-48 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-gray-800">Diagnostics</h3>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
+                                <img src="https://placehold.co/600x400/F87171/FFFFFF?text=Ambulance" alt="Ambulance" class="w-full h-48 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-gray-800">Ambulance</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ===== PATIENT DASHBOARD CONTENT ===== -->
+            <div id="dashboard" class="page">
+                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-8">Patient Dashboard</h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Dashboard Cards -->
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Upcoming Appointments</h3>
+                            <p class="text-gray-600">Dr. Chauhan - 4 PM Today</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                             <h3 class="font-semibold text-gray-800 mb-2">My Prescriptions</h3>
+                             <button class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">DOWNLOAD</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                            <h3 class="font-semibold text-gray-800 mb-2">Medical Reports</h3>
+                            <button class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">DOWNLOAD</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                            <h3 class="font-semibold text-gray-800 mb-2">Book New Appointment</h3>
+                            <button class="mt-4 w-full bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300">BOOK NOW</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                             <h3 class="font-semibold text-gray-800 mb-2">AI Symptom Checker</h3>
+                             <button class="mt-4 w-full bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300">ASK APNA AI</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                             <h3 class="font-semibold text-gray-800 mb-2">Emergency SOS</h3>
+                             <button class="mt-4 w-full bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300">CALL HELPLINE</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Overview</h3>
+                            <p class="text-gray-600">Health Summary - Last checkup: Normal</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Upcoming Events</h3>
+                            <p class="text-gray-600">Health Camp on 15th Oct</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Notifications</h3>
+                            <p class="text-gray-600">New prescription available</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                            <h3 class="font-semibold text-gray-800 mb-2">Booking History</h3>
+                            <button class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">VIEW HISTORY</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                             <h3 class="font-semibold text-gray-800 mb-2">Chat History</h3>
+                             <button class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">VIEW CHATS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ===== DOCTOR DASHBOARD CONTENT ===== -->
+            <div id="doctorDashboard" class="page">
+                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-8">Doctor Dashboard</h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Dashboard Cards -->
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Profile</h3>
+                            <p class="text-gray-600">Dr. Chauhan, Cardiologist</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Appointments</h3>
+                            <p class="text-gray-600">5 upcoming today.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                            <h3 class="font-semibold text-gray-800 mb-2">Video Consult</h3>
+                            <div class="flex space-x-2 mt-4">
+                                <button class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">NEXT CALL</button>
+                                <button class="w-full bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300">START</button>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                            <h3 class="font-semibold text-gray-800 mb-2">Patient History</h3>
+                            <button class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">VIEW RECORDS</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Upcoming Bookings</h3>
+                            <p class="text-gray-600">3 appointments scheduled for today</p>
+                        </div>
+            
+                        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                            <h3 class="font-semibold text-gray-800 mb-2">Take Consultancy</h3>
+                            <button class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">START SESSION</button>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                            <h3 class="font-semibold text-gray-800 mb-2">History of Patients</h3>
+                            <button class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">VIEW HISTORY</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== PHARMACY PAGE CONTENT ===== -->
+            <div id="pharmacy" class="page">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <section class="mb-12">
+                        <h1 class="text-3xl font-bold text-gray-800 mb-4">Online Pharmacy</h1>
+                        <div class="flex flex-col md:flex-row gap-8 items-start">
+                            <div class="w-full md:w-3/4">
+                                <input type="text" placeholder="Search for medicines..." class="w-full p-3 border border-gray-300 rounded-lg mb-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <!-- Pharmacy Items -->
+                                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                                        <h3 class="text-lg font-semibold text-gray-800">Paracetamol</h3>
+                                        <p class="text-gray-600 font-bold my-2">₹50</p>
+                                        <button class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">ADD TO CART</button>
+                                    </div>
+                                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                                        <h3 class="text-lg font-semibold text-gray-800">Aspirin</h3>
+                                        <p class="text-gray-600 font-bold my-2">₹30</p>
+                                        <button class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">ADD TO CART</button>
+                                    </div>
+                                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                                        <h3 class="text-lg font-semibold text-gray-800">Vitamin C</h3>
+                                        <p class="text-gray-600 font-bold my-2">₹80</p>
+                                        <button class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">ADD TO CART</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/4 bg-white p-6 rounded-lg shadow-md">
+                                <h2 class="text-xl font-bold text-gray-800 mb-4">Cart</h2>
+                                <p class="text-gray-600">Cart: 0 items</p>
+                                <button class="mt-6 w-full bg-teal-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-teal-600 transition duration-300">CHECKOUT</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            
+            <!-- ===== LAB TESTS PAGE CONTENT ===== -->
+            <div id="lab" class="page">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <section class="mb-16">
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Laboratory & Diagnostics</h1>
+                        <p class="text-gray-600 mb-6">Book a Test</p>
+                        <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl">
+                             <div class="mb-4">
+                                <select class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-700">
+                                    <option>Complete Blood Count (CBC)</option>
+                                    <option>Lipid Profile</option>
+                                    <option>Thyroid Function Test</option>
+                                    <option>Liver Function Test</option>
+                                </select>
+                            </div>
+                             <button class="w-full sm:w-auto bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300">BOOK HOME COLLECTION</button>
+                        </div>
+                    </section>
+                    
+                    <section>
+                         <h2 class="text-3xl font-bold text-gray-800 mb-2">Contact Us</h2>
+                         <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl">
+                            <form class="space-y-4">
+                                <input type="text" placeholder="Name" class="w-full p-3 border border-gray-300 rounded-lg">
+                                <input type="email" placeholder="Email" class="w-full p-3 border border-gray-300 rounded-lg">
+                                <textarea placeholder="Your Message..." rows="5" class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
+                                <button type="submit" class="bg-teal-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-teal-600 transition duration-300">Send Message</button>
+                            </form>
+                         </div>
+                    </section>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Back to Top Button -->
+        <button id="to-top-button" class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition duration-300 z-50" aria-label="Back to Top">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+        </button>
+    </div>
+
+    <!-- Contact Us Modal -->
+    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Owner Details</h2>
+            <div class="space-y-2">
+                <p><strong>Name:</strong> Dr. Rajesh Kumar</p>
+                <p><strong>Position:</strong> Founder & CEO</p>
+                <p><strong>Email:</strong> rajesh.kumar@apnaaspatal.com</p>
+                <p><strong>Phone:</strong> +91-9876543210</p>
+                <p><strong>Address:</strong> 123 Healthcare Street, Medical City, India</p>
+            </div>
+            <button id="closeModal" class="mt-6 w-full bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300">Close</button>
+        </div>
+    </div>
+
+    <!-- Emergency Help Modal -->
+    <div id="emergencyModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold text-red-600 mb-4">Emergency Helpline Numbers</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-gray-800">Ambulance</p>
+                        <p class="text-gray-600">For medical emergencies</p>
+                    </div>
+                    <a href="tel:108" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300">Call 108</a>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-gray-800">Police</p>
+                        <p class="text-gray-600">For law enforcement</p>
+                    </div>
+                    <a href="tel:100" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">Call 100</a>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-orange-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-gray-800">Fire Brigade</p>
+                        <p class="text-gray-600">For fire emergencies</p>
+                    </div>
+                    <a href="tel:101" class="bg-orange-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-orange-600 transition duration-300">Call 101</a>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-green-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-gray-800">Medical Helpline</p>
+                        <p class="text-gray-600">General medical advice</p>
+                    </div>
+                    <a href="tel:102" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300">Call 102</a>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-purple-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-gray-800">Poison Control</p>
+                        <p class="text-gray-600">For poisoning emergencies</p>
+                    </div>
+                    <a href="tel:1066" class="bg-purple-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-600 transition duration-300">Call 1066</a>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-pink-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-gray-800">Women's Helpline</p>
+                        <p class="text-gray-600">For women's safety and support</p>
+                    </div>
+                    <a href="tel:1091" class="bg-pink-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-pink-600 transition duration-300">Call 1091</a>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-yellow-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-gray-800">Child Helpline</p>
+                        <p class="text-gray-600">For child protection and support</p>
+                    </div>
+                    <a href="tel:1098" class="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-600 transition duration-300">Call 1098</a>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-indigo-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-gray-800">Senior Citizen Helpline</p>
+                        <p class="text-gray-600">For elderly assistance</p>
+                    </div>
+                    <a href="tel:1291" class="bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300">Call 1291</a>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-teal-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-gray-800">Disaster Management</p>
+                        <p class="text-gray-600">For disaster relief and information</p>
+                    </div>
+                    <a href="tel:1077" class="bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300">Call 1077</a>
+                </div>
+            </div>
+            <button id="closeEmergencyModal" class="mt-6 w-full bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300">Close</button>
+        </div>
+    </div>
+
+    <!-- Booking Appointment Modal -->
+    <div id="bookingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full mx-4 animate-slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Book Appointment</h2>
+                <button id="closeBookingModal" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <div id="bookingSteps">
+                <!-- Step 1: Select Doctor -->
+                <div id="step1" class="booking-step">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Select Doctor</h3>
+                    <div class="space-y-3">
+                        <select id="doctorSelect" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="">Choose a Doctor</option>
+                            <!-- Doctors will be populated by JS -->
+                        </select>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button id="nextToStep2" class="bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300" disabled>Next</button>
+                    </div>
+                </div>
+                <!-- Step 2: Select Date and Time -->
+                <div id="step2" class="booking-step hidden">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Select Date and Time</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-600 mb-2">Preferred Date</label>
+                            <input type="date" id="appointmentDate" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-gray-600 mb-2">Preferred Time</label>
+                            <select id="appointmentTime" class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option>9:00 AM</option>
+                                <option>10:00 AM</option>
+                                <option>11:00 AM</option>
+                                <option>2:00 PM</option>
+                                <option>3:00 PM</option>
+                                <option>4:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-between">
+                        <button id="backToStep1" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                        <button id="nextToStep3" class="bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300">Next</button>
+                    </div>
+                </div>
+                <!-- Step 3: Payment -->
+                <div id="step3" class="booking-step hidden">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Payment Details</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p><strong>Doctor:</strong> <span id="confirmDoctorName"></span></p>
+                        <p><strong>Specialty:</strong> <span id="confirmDoctorSpecialty"></span></p>
+                        <p><strong>Date:</strong> <span id="confirmDate"></span></p>
+                        <p><strong>Time:</strong> <span id="confirmTime"></span></p>
+                        <p><strong>Amount:</strong> ₹500</p>
+                    </div>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-gray-600 mb-2">Card Number</label>
+                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div class="flex space-x-4">
+                            <div class="flex-1">
+                                <label class="block text-gray-600 mb-2">Expiry Date</label>
+                                <input type="text" id="expiryDate" placeholder="MM/YY" class="w-full p-3 border border-gray-300 rounded-lg">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-gray-600 mb-2">CVV</label>
+                                <input type="text" id="cvv" placeholder="123" class="w-full p-3 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-600 mb-2">Cardholder Name</label>
+                            <input type="text" id="cardholderName" placeholder="John Doe" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                    </form>
+                    <div class="mt-6 flex justify-between">
+                        <button id="backToStep2" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                        <button id="confirmBooking" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Confirm & Pay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consult Online Modal -->
+    <div id="consultOnlineModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full mx-4 animate-slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Consult Online</h2>
+                <button id="closeConsultOnlineModal" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <div id="consultOnlineSteps">
+                <!-- Step 1: Select Consultation Type -->
+                <div id="consultStep1" class="consult-step">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Select Consultation Type</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center">
+                            <input type="radio" name="consultType" value="video" class="mr-3">
+                            <span>Video Call</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="consultType" value="chat" class="mr-3">
+                            <span>Chat</span>
+                        </label>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button id="nextToConsultStep2" class="bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300" disabled>Next</button>
+                    </div>
+                </div>
+                <!-- Step 2: Select Doctor -->
+                <div id="consultStep2" class="consult-step hidden">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Select Doctor</h3>
+                    <div class="space-y-3">
+                        <select id="consultDoctorSelect" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="">Choose a Doctor</option>
+                            <!-- Doctors will be populated by JS -->
+                        </select>
+                    </div>
+                    <div class="mt-6 flex justify-between">
+                        <button id="backToConsultStep1" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                        <button id="nextToConsultStep3" class="bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300" disabled>Next</button>
+                    </div>
+                </div>
+                <!-- Step 3: Select Date and Time -->
+                <div id="consultStep3" class="consult-step hidden">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Select Date and Time</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-600 mb-2">Preferred Date</label>
+                            <input type="date" id="consultDate" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-gray-600 mb-2">Preferred Time</label>
+                            <select id="consultTime" class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option>9:00 AM</option>
+                                <option>10:00 AM</option>
+                                <option>11:00 AM</option>
+                                <option>2:00 PM</option>
+                                <option>3:00 PM</option>
+                                <option>4:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-between">
+                        <button id="backToConsultStep2" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                        <button id="nextToConsultStep4" class="bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300">Next</button>
+                    </div>
+                </div>
+                <!-- Step 4: Payment -->
+                <div id="consultStep4" class="consult-step hidden">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Payment Details</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p><strong>Type:</strong> <span id="confirmConsultType"></span></p>
+                        <p><strong>Doctor:</strong> <span id="confirmConsultDoctorName"></span></p>
+                        <p><strong>Specialty:</strong> <span id="confirmConsultDoctorSpecialty"></span></p>
+                        <p><strong>Date:</strong> <span id="confirmConsultDate"></span></p>
+                        <p><strong>Time:</strong> <span id="confirmConsultTime"></span></p>
+                        <p><strong>Amount:</strong> ₹300</p>
+                    </div>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-gray-600 mb-2">Card Number</label>
+                            <input type="text" id="consultCardNumber" placeholder="1234 5678 9012 3456" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div class="flex space-x-4">
+                            <div class="flex-1">
+                                <label class="block text-gray-600 mb-2">Expiry Date</label>
+                                <input type="text" id="consultExpiryDate" placeholder="MM/YY" class="w-full p-3 border border-gray-300 rounded-lg">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-gray-600 mb-2">CVV</label>
+                                <input type="text" id="consultCvv" placeholder="123" class="w-full p-3 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-600 mb-2">Cardholder Name</label>
+                            <input type="text" id="consultCardholderName" placeholder="John Doe" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                    </form>
+                    <div class="mt-6 flex justify-between">
+                        <button id="backToConsultStep3" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                        <button id="confirmConsultOnline" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Confirm & Pay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginPage = document.getElementById('loginPage');
+            const mainApp = document.getElementById('mainApp');
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+            const themeToggle = document.getElementById('toggle');
+            const loginThemeToggle = document.getElementById('login-theme-toggle');
+            const toTopButton = document.getElementById('to-top-button');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const roleSelector = document.querySelector('#loginPage select');
+            const registerBtn = document.getElementById('registerBtn');
+            const backToLoginBtn = document.getElementById('backToLoginBtn');
+            const registerLink = document.getElementById('registerLink');
+            const loginLink = document.getElementById('loginLink');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            // Dummy data for search
+            const dummyData = {
+                doctor: [
+                    { name: "Dr. Rajesh Kumar", specialty: "Cardiologist", location: "Delhi", experience: "15 years", rating: "4.8" },
+                    { name: "Dr. Priya Sharma", specialty: "Dermatologist", location: "Mumbai", experience: "10 years", rating: "4.7" },
+                    { name: "Dr. Anil Gupta", specialty: "Neurologist", location: "Bangalore", experience: "20 years", rating: "4.9" },
+                    { name: "Dr. Sunita Patel", specialty: "Pediatrician", location: "Ahmedabad", experience: "12 years", rating: "4.6" },
+                    { name: "Dr. Vikram Singh", specialty: "Orthopedic", location: "Jaipur", experience: "18 years", rating: "4.8" },
+                    { name: "Dr. Meera Joshi", specialty: "Gynecologist", location: "Pune", experience: "14 years", rating: "4.7" },
+                    { name: "Dr. Ramesh Verma", specialty: "Dentist", location: "Chennai", experience: "8 years", rating: "4.5" },
+                    { name: "Dr. Kavita Rao", specialty: "Psychiatrist", location: "Hyderabad", experience: "16 years", rating: "4.9" }
+                ],
+                specialist: [
+                    { name: "Dr. Arjun Mehta", specialty: "Cardiac Surgeon", location: "Delhi", experience: "22 years", rating: "4.9" },
+                    { name: "Dr. Neha Agarwal", specialty: "Endocrinologist", location: "Mumbai", experience: "13 years", rating: "4.8" },
+                    { name: "Dr. Sanjay Kumar", specialty: "Nephrologist", location: "Bangalore", experience: "19 years", rating: "4.7" },
+                    { name: "Dr. Pooja Desai", specialty: "Oncologist", location: "Chennai", experience: "17 years", rating: "4.9" },
+                    { name: "Dr. Rohit Jain", specialty: "Urologist", location: "Pune", experience: "15 years", rating: "4.6" },
+                    { name: "Dr. Anjali Nair", specialty: "Rheumatologist", location: "Kolkata", experience: "11 years", rating: "4.7" }
+                ],
+                hospital: [
+                    { name: "AIIMS Delhi", location: "Delhi", type: "Government", beds: "2000", rating: "4.8" },
+                    { name: "Apollo Hospital", location: "Chennai", type: "Private", beds: "1000", rating: "4.7" },
+                    { name: "Max Healthcare", location: "Delhi", type: "Private", beds: "800", rating: "4.6" },
+                    { name: "Fortis Hospital", location: "Mumbai", type: "Private", beds: "1200", rating: "4.8" },
+                    { name: "Medanta Hospital", location: "Gurgaon", type: "Private", beds: "1500", rating: "4.9" },
+                    { name: "Kokilaben Dhirubhai Ambani Hospital", location: "Mumbai", type: "Private", beds: "750", rating: "4.7" },
+                    { name: "Christian Medical College", location: "Vellore", type: "Private", beds: "2500", rating: "4.8" },
+                    { name: "Sir Ganga Ram Hospital", location: "Delhi", type: "Private", beds: "675", rating: "4.6" }
+                ]
+            };
+
+            // Search functionality
+            const searchCategory = document.getElementById('search-category');
+            const searchInput = document.getElementById('search-input');
+            const searchOptions = document.getElementById('search-options');
+            const searchBtn = document.getElementById('search-btn');
+            const searchResults = document.getElementById('search-results');
+            const resultsList = document.getElementById('results-list');
+
+            // Populate datalist on category change
+            function populateDatalist(category) {
+                searchOptions.innerHTML = '';
+                const uniqueOptions = new Set();
+                dummyData[category].forEach(item => {
+                    if (category === 'doctor' || category === 'specialist') {
+                        uniqueOptions.add(item.specialty);
+                    } else if (category === 'hospital') {
+                        uniqueOptions.add(item.name);
+                        uniqueOptions.add(item.type);
+                    }
+                });
+                uniqueOptions.forEach(optionValue => {
+                    const option = document.createElement('option');
+                    option.value = optionValue;
+                    searchOptions.appendChild(option);
+                });
+            }
+
+            // Initial populate
+            populateDatalist(searchCategory.value);
+
+            // Change category
+            searchCategory.addEventListener('change', () => {
+                populateDatalist(searchCategory.value);
+                searchInput.value = '';
+                searchResults.classList.add('hidden');
+            });
+
+            // Search function
+            function performSearch() {
+                const category = searchCategory.value;
+                const query = searchInput.value.toLowerCase().trim();
+                const data = dummyData[category];
+
+                let results = data;
+                if (query) {
+                    results = data.filter(item =>
+                        item.name.toLowerCase().includes(query) ||
+                        item.specialty?.toLowerCase().includes(query) ||
+                        item.location.toLowerCase().includes(query)
+                    );
+                }
+
+                displayResults(results, category);
+            }
+
+            // Display results
+            function displayResults(results, category) {
+                resultsList.innerHTML = '';
+                if (results.length === 0) {
+                    resultsList.innerHTML = '<p class="text-gray-600 text-center col-span-full">No results found.</p>';
+                } else {
+                    results.forEach((item, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'bg-white p-6 rounded-lg shadow-md transform hover:-translate-y-2 transition duration-300 animate-fade-in-scale';
+                        card.style.animationDelay = `${index * 0.1}s`;
+
+                        if (category === 'hospital') {
+                            card.innerHTML = `
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">${item.name}</h3>
+                                <p class="text-gray-600 mb-1"><strong>Location:</strong> ${item.location}</p>
+                                <p class="text-gray-600 mb-1"><strong>Type:</strong> ${item.type}</p>
+                                <p class="text-gray-600 mb-1"><strong>Beds:</strong> ${item.beds}</p>
+                                <p class="text-gray-600 mb-2"><strong>Rating:</strong> ⭐ ${item.rating}</p>
+                                <button class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 pulse-hover">VIEW DETAILS</button>
+                            `;
+                        } else {
+                            card.innerHTML = `
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">${item.name}</h3>
+                                <p class="text-gray-600 mb-1"><strong>Specialty:</strong> ${item.specialty}</p>
+                                <p class="text-gray-600 mb-1"><strong>Location:</strong> ${item.location}</p>
+                                <p class="text-gray-600 mb-1"><strong>Experience:</strong> ${item.experience}</p>
+                                <p class="text-gray-600 mb-2"><strong>Rating:</strong> ⭐ ${item.rating}</p>
+                                <button class="book-appointment-btn w-full bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-300 pulse-hover" data-doctor-name="${item.name}">BOOK APPOINTMENT</button>
+                            `;
+                        }
+
+                        resultsList.appendChild(card);
+                    });
+                }
+                searchResults.classList.remove('hidden');
+                // Scroll to results
+                searchResults.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Search button click
+            searchBtn.addEventListener('click', performSearch);
+
+            // Search on enter
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // Function to switch between pages
+            function showPage(pageId) {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                const activePage = document.getElementById(pageId);
+                if (activePage) {
+                    activePage.classList.add('active');
+                }
+                // Close mobile menu after navigation
+                mobileMenu.classList.add('hidden');
+            }
+
+            // Login validation functions
+            function validateLoginEmail() {
+                const email = document.getElementById('login-email').value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const errorElement = document.getElementById('login-email-error');
+                if (!emailRegex.test(email)) {
+                    errorElement.textContent = 'Please enter a valid email address.';
+                    return false;
+                }
+                errorElement.textContent = '';
+                return true;
+            }
+
+            function validateLoginPassword() {
+                const password = document.getElementById('login-password').value;
+                const errorElement = document.getElementById('login-password-error');
+                if (password.length === 0) {
+                    errorElement.textContent = 'Password is required.';
+                    return false;
+                }
+                errorElement.textContent = '';
+                return true;
+            }
+
+            // Clear errors on input
+            document.getElementById('login-email').addEventListener('input', () => {
+                document.getElementById('login-email-error').textContent = '';
+            });
+            document.getElementById('login-password').addEventListener('input', () => {
+                document.getElementById('login-password-error').textContent = '';
+            });
+
+            // Login functionality
+            loginBtn.addEventListener('click', () => {
+                const isEmailValid = validateLoginEmail();
+                const isPasswordValid = validateLoginPassword();
+                if (!isEmailValid || !isPasswordValid) {
+                    return; // Stop if validation fails
+                }
+                const selectedRole = roleSelector.value;
+                loginPage.classList.remove('active');
+                loginPage.style.display = 'none'; // Use style.display to fully hide
+                mainApp.style.display = 'block';
+
+                if (selectedRole === 'Role: Doctor') {
+                    showPage('doctorDashboard');
+                } else {
+                    showPage('home'); // Show home page for Patient/Admin
+                }
+            });
+
+            // Logout functionality
+            logoutBtn.addEventListener('click', () => {
+                mainApp.style.display = 'none';
+                loginPage.style.display = 'block'; // Use style.display
+                loginPage.classList.add('active');
+            });
+            
+            // Navigation link clicks
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.getAttribute('data-page');
+                    showPage(pageId);
+                });
+            });
+
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Dark Mode Toggle
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            });
+
+            // Login Page Dark Mode Toggle
+            loginThemeToggle.addEventListener('change', () => {
+                if (loginThemeToggle.checked) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            });
+
+            // Back to Top Button
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    toTopButton.style.display = 'block';
+                } else {
+                    toTopButton.style.display = 'none';
+                }
+            });
+            
+            toTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Register button click
+            registerBtn.addEventListener('click', () => {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+            });
+
+            // Back to login button click
+            backToLoginBtn.addEventListener('click', () => {
+                registerForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+            });
+
+            // Register link click
+            registerLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+            });
+
+            // Login link click
+            loginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                registerForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+            });
+
+            // Initial setup to show login page
+            mainApp.style.display = 'none';
+            loginPage.style.display = 'block';
+
+            // Contact Us Modal functionality
+            const contactUsLink = document.getElementById('contactUsLink');
+            const contactModal = document.getElementById('contactModal');
+            const closeModalBtn = document.getElementById('closeModal');
+
+            contactUsLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                contactModal.classList.remove('hidden');
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                contactModal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside
+            contactModal.addEventListener('click', (e) => {
+                if (e.target === contactModal) {
+                    contactModal.classList.add('hidden');
+                }
+            });
+
+            // Booking Appointment Modal functionality
+            const bookingModal = document.getElementById('bookingModal');
+            const closeBookingModal = document.getElementById('closeBookingModal');
+            const bookAppointmentBtn = document.getElementById('bookAppointmentBtn');
+            const doctorSelect = document.getElementById('doctorSelect');
+            const nextToStep2 = document.getElementById('nextToStep2');
+            const backToStep1 = document.getElementById('backToStep1');
+            const nextToStep3 = document.getElementById('nextToStep3');
+            const backToStep2 = document.getElementById('backToStep2');
+            const confirmBooking = document.getElementById('confirmBooking');
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const confirmDoctorName = document.getElementById('confirmDoctorName');
+            const confirmDoctorSpecialty = document.getElementById('confirmDoctorSpecialty');
+            const confirmDate = document.getElementById('confirmDate');
+            const confirmTime = document.getElementById('confirmTime');
+
+            // Populate doctor select
+            dummyData.doctor.forEach(doctor => {
+                const option = document.createElement('option');
+                option.value = doctor.name;
+                option.textContent = `${doctor.name} - ${doctor.specialty}`;
+                option.dataset.specialty = doctor.specialty;
+                doctorSelect.appendChild(option);
+            });
+
+            bookAppointmentBtn.addEventListener('click', () => {
+                bookingModal.classList.remove('hidden');
+                // Reset to step 1
+                step1.classList.remove('hidden');
+                step2.classList.add('hidden');
+                step3.classList.add('hidden');
+                nextToStep2.disabled = true;
+            });
+
+            closeBookingModal.addEventListener('click', () => {
+                bookingModal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside
+            bookingModal.addEventListener('click', (e) => {
+                if (e.target === bookingModal) {
+                    bookingModal.classList.add('hidden');
+                }
+            });
+
+            // Enable next button when doctor selected
+            doctorSelect.addEventListener('change', () => {
+                nextToStep2.disabled = !doctorSelect.value;
+            });
+
+            // Step navigation
+            nextToStep2.addEventListener('click', () => {
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+            });
+
+            backToStep1.addEventListener('click', () => {
+                step2.classList.add('hidden');
+                step1.classList.remove('hidden');
+            });
+
+            nextToStep3.addEventListener('click', () => {
+                const selectedDoctor = doctorSelect.options[doctorSelect.selectedIndex];
+                const date = document.getElementById('appointmentDate').value;
+                const time = document.getElementById('appointmentTime').value;
+
+                if (!date || !time) {
+                    alert('Please select a date and time.');
+                    return;
+                }
+
+                confirmDoctorName.textContent = selectedDoctor.value;
+                confirmDoctorSpecialty.textContent = selectedDoctor.dataset.specialty;
+                confirmDate.textContent = date;
+                confirmTime.textContent = time;
+
+                step2.classList.add('hidden');
+                step3.classList.remove('hidden');
+            });
+
+            backToStep2.addEventListener('click', () => {
+                step3.classList.add('hidden');
+                step2.classList.remove('hidden');
+            });
+
+            confirmBooking.addEventListener('click', () => {
+                // Simple validation for payment fields
+                const cardNumber = document.getElementById('cardNumber').value.trim();
+                const expiryDate = document.getElementById('expiryDate').value.trim();
+                const cvv = document.getElementById('cvv').value.trim();
+                const cardholderName = document.getElementById('cardholderName').value.trim();
+
+                if (!cardNumber || !expiryDate || !cvv || !cardholderName) {
+                    alert('Please fill in all payment details.');
+                    return;
+                }
+
+                alert('Appointment booked successfully!');
+                bookingModal.classList.add('hidden');
+                // Reset form if needed
+                document.getElementById('appointmentDate').value = '';
+                document.getElementById('appointmentTime').selectedIndex = 0;
+                document.getElementById('cardNumber').value = '';
+                document.getElementById('expiryDate').value = '';
+                document.getElementById('cvv').value = '';
+                document.getElementById('cardholderName').value = '';
+            });
+
+            // Emergency Help Modal functionality
+            const emergencyModal = document.getElementById('emergencyModal');
+            const closeEmergencyModal = document.getElementById('closeEmergencyModal');
+            const emergencyHelpBtn = document.getElementById('emergencyHelpBtn');
+
+            emergencyHelpBtn.addEventListener('click', () => {
+                emergencyModal.classList.remove('hidden');
+            });
+
+            closeEmergencyModal.addEventListener('click', () => {
+                emergencyModal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside
+            emergencyModal.addEventListener('click', (e) => {
+                if (e.target === emergencyModal) {
+                    emergencyModal.classList.add('hidden');
+                }
+            });
+
+            // Consult Online Modal functionality
+            const consultOnlineModal = document.getElementById('consultOnlineModal');
+            const closeConsultOnlineModal = document.getElementById('closeConsultOnlineModal');
+            const consultOnlineBtn = document.getElementById('consultOnlineBtn');
+            const consultDoctorSelect = document.getElementById('consultDoctorSelect');
+            const nextToConsultStep2 = document.getElementById('nextToConsultStep2');
+            const backToConsultStep1 = document.getElementById('backToConsultStep1');
+            const nextToConsultStep3 = document.getElementById('nextToConsultStep3');
+            const backToConsultStep2 = document.getElementById('backToConsultStep2');
+            const nextToConsultStep4 = document.getElementById('nextToConsultStep4');
+            const backToConsultStep3 = document.getElementById('backToConsultStep3');
+            const confirmConsultOnline = document.getElementById('confirmConsultOnline');
+            const consultStep1 = document.getElementById('consultStep1');
+            const consultStep2 = document.getElementById('consultStep2');
+            const consultStep3 = document.getElementById('consultStep3');
+            const consultStep4 = document.getElementById('consultStep4');
+            const confirmConsultType = document.getElementById('confirmConsultType');
+            const confirmConsultDoctorName = document.getElementById('confirmConsultDoctorName');
+            const confirmConsultDoctorSpecialty = document.getElementById('confirmConsultDoctorSpecialty');
+            const confirmConsultDate = document.getElementById('confirmConsultDate');
+            const confirmConsultTime = document.getElementById('confirmConsultTime');
+
+            // Populate consult doctor select
+            dummyData.doctor.forEach(doctor => {
+                const option = document.createElement('option');
+                option.value = doctor.name;
+                option.textContent = `${doctor.name} - ${doctor.specialty}`;
+                option.dataset.specialty = doctor.specialty;
+                consultDoctorSelect.appendChild(option);
+            });
+
+            consultOnlineBtn.addEventListener('click', () => {
+                consultOnlineModal.classList.remove('hidden');
+                // Reset to step 1
+                consultStep1.classList.remove('hidden');
+                consultStep2.classList.add('hidden');
+                consultStep3.classList.add('hidden');
+                consultStep4.classList.add('hidden');
+                nextToConsultStep2.disabled = true;
+            });
+
+            closeConsultOnlineModal.addEventListener('click', () => {
+                consultOnlineModal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside
+            consultOnlineModal.addEventListener('click', (e) => {
+                if (e.target === consultOnlineModal) {
+                    consultOnlineModal.classList.add('hidden');
+                }
+            });
+
+            // Enable next button when consult type selected
+            document.querySelectorAll('input[name="consultType"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    nextToConsultStep2.disabled = false;
+                });
+            });
+
+            // Enable next to step 3 when doctor selected
+            consultDoctorSelect.addEventListener('change', () => {
+                nextToConsultStep3.disabled = !consultDoctorSelect.value;
+            });
+
+            // Step navigation
+            nextToConsultStep2.addEventListener('click', () => {
+                consultStep1.classList.add('hidden');
+                consultStep2.classList.remove('hidden');
+            });
+
+            backToConsultStep1.addEventListener('click', () => {
+                consultStep2.classList.add('hidden');
+                consultStep1.classList.remove('hidden');
+            });
+
+            nextToConsultStep3.addEventListener('click', () => {
+                consultStep2.classList.add('hidden');
+                consultStep3.classList.remove('hidden');
+            });
+
+            backToConsultStep2.addEventListener('click', () => {
+                consultStep3.classList.add('hidden');
+                consultStep2.classList.remove('hidden');
+            });
+
+            nextToConsultStep4.addEventListener('click', () => {
+                const selectedType = document.querySelector('input[name="consultType"]:checked').value;
+                const selectedDoctor = consultDoctorSelect.options[consultDoctorSelect.selectedIndex];
+                const date = document.getElementById('consultDate').value;
+                const time = document.getElementById('consultTime').value;
+
+                if (!date || !time) {
+                    alert('Please select a date and time.');
+                    return;
+                }
+
+                confirmConsultType.textContent = selectedType === 'video' ? 'Video Call' : 'Chat';
+                confirmConsultDoctorName.textContent = selectedDoctor.value;
+                confirmConsultDoctorSpecialty.textContent = selectedDoctor.dataset.specialty;
+                confirmConsultDate.textContent = date;
+                confirmConsultTime.textContent = time;
+
+                consultStep3.classList.add('hidden');
+                consultStep4.classList.remove('hidden');
+            });
+
+            backToConsultStep3.addEventListener('click', () => {
+                consultStep4.classList.add('hidden');
+                consultStep3.classList.remove('hidden');
+            });
+
+            confirmConsultOnline.addEventListener('click', () => {
+                // Simple validation for payment fields
+                const cardNumber = document.getElementById('consultCardNumber').value.trim();
+                const expiryDate = document.getElementById('consultExpiryDate').value.trim();
+                const cvv = document.getElementById('consultCvv').value.trim();
+                const cardholderName = document.getElementById('consultCardholderName').value.trim();
+
+                if (!cardNumber || !expiryDate || !cvv || !cardholderName) {
+                    alert('Please fill in all payment details.');
+                    return;
+                }
+
+                alert('Consultation booked successfully!');
+                consultOnlineModal.classList.add('hidden');
+                // Reset form if needed
+                document.querySelectorAll('input[name="consultType"]').forEach(radio => radio.checked = false);
+                consultDoctorSelect.selectedIndex = 0;
+                document.getElementById('consultDate').value = '';
+                document.getElementById('consultTime').selectedIndex = 0;
+                document.getElementById('consultCardNumber').value = '';
+                document.getElementById('consultExpiryDate').value = '';
+                document.getElementById('consultCvv').value = '';
+                document.getElementById('consultCardholderName').value = '';
+            });
+
+            // Registration form validation
+            const registerSubmitBtn = document.getElementById('registerSubmitBtn');
+            const registerFullname = document.getElementById('register-fullname');
+            const registerEmail = document.getElementById('register-email');
+            const registerPassword = document.getElementById('register-password');
+            const registerConfirmPassword = document.getElementById('register-confirm-password');
+            const registerPhone = document.getElementById('register-phone');
+            const registerRole = document.getElementById('register-role');
+
+            // Error elements
+            const fullnameError = document.getElementById('register-fullname-error');
+            const emailError = document.getElementById('register-email-error');
+            const passwordError = document.getElementById('register-password-error');
+            const confirmPasswordError = document.getElementById('register-confirm-password-error');
+            const phoneError = document.getElementById('register-phone-error');
+
+            // Validation functions
+            function validateFullname() {
+                const value = registerFullname.value.trim();
+                if (value.length < 2) {
+                    fullnameError.textContent = 'Full name must be at least 2 characters.';
+                    return false;
+                }
+                fullnameError.textContent = '';
+                return true;
+            }
+
+            function validateEmail() {
+                const value = registerEmail.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    emailError.textContent = 'Please enter a valid email address.';
+                    return false;
+                }
+                emailError.textContent = '';
+                return true;
+            }
+
+            function validatePassword() {
+                const value = registerPassword.value;
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if (!passwordRegex.test(value)) {
+                    passwordError.textContent = 'Password must be at least 8 characters with uppercase, lowercase, number, and special character.';
+                    return false;
+                }
+                passwordError.textContent = '';
+                return true;
+            }
+
+            function validateConfirmPassword() {
+                const value = registerConfirmPassword.value;
+                if (value !== registerPassword.value) {
+                    confirmPasswordError.textContent = 'Passwords do not match.';
+                    return false;
+                }
+                confirmPasswordError.textContent = '';
+                return true;
+            }
+
+            function validatePhone() {
+                const value = registerPhone.value.trim();
+                const phoneRegex = /^\d{10}$/;
+                if (!phoneRegex.test(value)) {
+                    phoneError.textContent = 'Please enter a valid 10-digit phone number.';
+                    return false;
+                }
+                phoneError.textContent = '';
+                return true;
+            }
+
+            function validateRole() {
+                if (registerRole.value === '') {
+                    alert('Please select a role.');
+                    return false;
+                }
+                return true;
+            }
+
+            // Clear errors on input
+            registerFullname.addEventListener('input', () => fullnameError.textContent = '');
+            registerEmail.addEventListener('input', () => emailError.textContent = '');
+            registerPassword.addEventListener('input', () => passwordError.textContent = '');
+            registerConfirmPassword.addEventListener('input', () => confirmPasswordError.textContent = '');
+            registerPhone.addEventListener('input', () => phoneError.textContent = '');
+
+            // Form submission
+            registerSubmitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isValid = validateFullname() && validateEmail() && validatePassword() && validateConfirmPassword() && validatePhone() && validateRole();
+                if (isValid) {
+                    alert('Registration successful!'); // Simulate success
+                    // Here you can add code to submit the form or redirect
+                }
+            });
+        });
+    </script>
+</body>
+</html>

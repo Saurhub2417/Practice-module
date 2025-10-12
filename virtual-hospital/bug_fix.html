@@ -1,0 +1,2415 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Apna Aspatal - Modified</title>
+    <style>
+      :root {
+        --primary: #007bff;
+        --secondary: #00bfa5;
+        --accent: #ffc107;
+        --light: #f8f9fa;
+        --dark: #343a40;
+        --white: #ffffff;
+        --danger: #dc3545;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        --br: 8px;
+        --border: #e0e0e0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Arial, sans-serif;
+        margin: 0;
+        padding-top: 60px;
+        background: var(--light);
+        color: var(--dark);
+        transition: background 0.25s, color 0.25s;
+      }
+      body.dark-mode {
+        --light: #121212;
+        --dark: #e0e0e0;
+        --white: #1e1e1e;
+        --shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+      }
+      body.dark-mode input,
+      body.dark-mode select,
+      body.dark-mode textarea {
+        background: var(--white);
+        color: var(--dark);
+      }
+      body.dark-mode footer {
+        background: var(--white);
+        color: var(--dark);
+      }
+      body.dark-mode label,
+      body.dark-mode p,
+      body.dark-mode span,
+      body.dark-mode div {
+        color: var(--dark) !important;
+      }
+      body.dark-mode input,
+      body.dark-mode select,
+      body.dark-mode textarea {
+        background: var(--white) !important;
+        color: var(--dark) !important;
+        border-color: var(--border);
+      }
+      body.dark-mode .card,
+      body.dark-mode .modal {
+        background: var(--white);
+        color: var(--dark);
+      }
+      body.dark-mode .message.user {
+        background: var(--primary);
+        color: #fff;
+      }
+      body.dark-mode .message.ai {
+        background: var(--light);
+        color: var(--dark);
+      }
+      #auth-container {
+        background: linear-gradient(
+            135deg,
+            rgba(0, 123, 255, 0.8),
+            rgba(0, 191, 165, 0.8),
+            rgba(0, 123, 255, 0.8)
+          );
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.6rem 1rem;
+        background: var(--white);
+        box-shadow: var(--shadow);
+        z-index: 1100;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 0.8rem;
+        margin: 0;
+        padding: 0;
+      }
+      nav a {
+        text-decoration: none;
+        color: var(--dark);
+        padding: 0.25rem 0.35rem;
+        font-weight: 600;
+      }
+      nav a.active {
+        border-bottom: 2px solid var(--primary);
+        color: var(--primary);
+      }
+      .header-controls {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .toggle-btn,
+      .lang-select {
+        padding: 0.35rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: transparent;
+        cursor: pointer;
+      }
+      input {
+        background: white;
+        color: black;
+      }
+      .btn {
+        background: var(--primary);
+        color: #fff;
+        padding: 0.6rem 0.9rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.2s ease;
+      }
+      .btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        background: var(--secondary);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+      }
+      .btn-emergency {
+        background: var(--danger);
+      }
+      .hero {
+        background: linear-gradient(
+            to right,
+            rgba(0, 123, 255, 0.9),
+            rgba(0, 191, 165, 0.9)
+          ),
+          url("https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop")
+            center/cover no-repeat;
+        color: #fff;
+        padding: 5rem 1.25rem;
+        text-align: center;
+      }
+      .search-bar {
+        display: flex;
+        gap: 0.4rem;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+      .search-bar input {
+        padding: 0.6rem;
+        border-radius: 8px 0 0 8px;
+        border: none;
+        width: 360px;
+      }
+      .search-bar select {
+        padding: 0.55rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+        max-width: 1100px;
+      }
+      .service-card {
+        background: var(--white);
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        text-align: center;
+      }
+      section {
+        padding: 3.5rem 1.25rem;
+      }
+      .auth-box {
+        max-width: 420px;
+        margin: 0 auto;
+        padding: 1.5rem;
+        background: var(--white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+      }
+      form input,
+      form select,
+      form textarea {
+        width: 100%;
+        padding: 0.6rem;
+        margin: 0.45rem 0;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        box-sizing: border-box;
+      }
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+      }
+      .card {
+        background: var(--white);
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        text-align: left;
+      }
+      .products {
+        display: flex;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      footer {
+        background: var(--dark);
+        color: #fff;
+        padding: 1rem;
+        text-align: center;
+        margin-top: 1.5rem;
+      }
+      .back-to-top {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        display: none;
+        z-index: 1200;
+      }
+      /* modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 2000;
+        display: none;
+      }
+      .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.96);
+        background: var(--white);
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        z-index: 2001;
+        width: 92%;
+        max-width: 720px;
+        max-height: 85vh;
+        overflow: auto;
+        opacity: 0;
+        transition: all 0.26s ease;
+      }
+      .modal.small {
+        max-width: 480px;
+      }
+      .modal.show {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      .modal h3 {
+        margin: 0 0 0.5rem;
+        color: var(--primary);
+      }
+      .spinner {
+        border: 4px solid var(--border);
+        border-top: 4px solid var(--primary);
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        animation: spin 1s linear infinite;
+        margin: 0.6rem auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      /* animations */
+      .fade-in {
+        animation: fadeIn 0.36s ease both;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .slide-up {
+        animation: slideUp 0.36s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      /* new animations and transitions */
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.6s ease;
+      }
+      .animate-on-scroll.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .hover-scale {
+        transition: transform 0.3s ease;
+      }
+      .hover-scale:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+      }
+      .hover-lift {
+        transition: all 0.3s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-5px) rotate(1deg);
+        box-shadow: var(--shadow) 0 8px 20px;
+      }
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+      }
+      .bounce-in {
+        animation: bounce 0.6s ease-out;
+      }
+      @keyframes bounce {
+        0% { transform: translateY(30px) scale(0.9); opacity: 0; }
+        50% { transform: translateY(-10px) scale(1.05); opacity: 1; }
+        70% { transform: translateY(5px) scale(0.98); }
+        100% { transform: translateY(0) scale(1); opacity: 1; }
+      }
+      .stagger {
+        animation-delay: calc(var(--order) * 0.1s);
+      }
+      .focus-glow input:focus, .focus-glow select:focus, .focus-glow textarea:focus {
+        box-shadow: 0 0 10px var(--primary);
+        transition: box-shadow 0.3s;
+      }
+      .nav-hover a {
+        transition: all 0.3s ease;
+      }
+      .nav-hover a:hover {
+        color: var(--primary);
+        transform: translateX(5px);
+      }
+      .hero-stagger {
+        opacity: 0;
+        animation: slideFromLeft 0.8s ease forwards;
+        animation-delay: calc(var(--order, 0) * 0.2s);
+      }
+      @keyframes slideFromLeft {
+        from { transform: translateX(-100px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      .back-to-top {
+        transition: all 0.3s ease;
+      }
+      .back-to-top:hover {
+        transform: scale(1.1);
+        animation: pulse 1s;
+      }
+      /* background images for service cards */
+      .doctor-bg {
+        background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        position: relative;
+      }
+      .doctor-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 0;
+      }
+      .doctor-bg h4 {
+        position: relative;
+        z-index: 1;
+      }
+      .pharmacy-bg {
+        background-image: url('https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        position: relative;
+      }
+      .pharmacy-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 0;
+      }
+      .pharmacy-bg h4 {
+        position: relative;
+        z-index: 1;
+      }
+      .diagnostic-bg {
+        background-image: url('https://images.unsplash.com/photo-1576671081837-49000212a370?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        position: relative;
+      }
+      .diagnostic-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 0;
+      }
+      .diagnostic-bg h4 {
+        position: relative;
+        z-index: 1;
+      }
+      .ambulance-bg {
+        background-image: url('https://images.unsplash.com/photo-1551190822-a9333d879b1f?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        position: relative;
+      }
+      .ambulance-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 0;
+      }
+      .ambulance-bg h4 {
+        position: relative;
+        z-index: 1;
+      }
+      footer {
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+      /* 3D effects */
+      .hover-3d {
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        transition: transform 0.5s ease;
+      }
+      .hover-3d:hover {
+        transform: rotateX(10deg) rotateY(10deg);
+      }
+      .flip-3d {
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease;
+      }
+      .flip-3d:hover {
+        transform: rotateY(180deg);
+      }
+      .tilt-3d {
+        animation: tilt 2s ease-in-out infinite;
+      }
+      @keyframes tilt {
+        0%, 100% { transform: rotateX(0) rotateY(0); }
+        25% { transform: rotateX(5deg) rotateY(5deg); }
+        50% { transform: rotateX(0) rotateY(10deg); }
+        75% { transform: rotateX(-5deg) rotateY(5deg); }
+      }
+      .depth-slide {
+        animation: depthSlide 1s ease-out;
+      }
+      @keyframes depthSlide {
+        from { transform: translateZ(-200px) scale(0.8); opacity: 0; }
+        to { transform: translateZ(0) scale(1); opacity: 1; }
+      }
+      /* enhance existing */
+      .btn {
+        transition: all 0.3s ease;
+      }
+      .btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+      }
+      .service-card, .card, .product {
+        transition: all 0.3s ease;
+      }
+      .modal.show {
+        animation: bounce 0.5s ease-out;
+      }
+      /* mobile adjustments */
+      @media (max-width: 768px) {
+        .animate-on-scroll, .hover-scale, .hover-lift, .hover-3d, .flip-3d {
+          transition-duration: 0.2s;
+        }
+        .pulse, .bounce-in, .tilt-3d, .depth-slide {
+          animation-duration: 0.5s;
+        }
+      }
+      /* small screens */
+      @media (max-width: 768px) {
+        .search-bar input {
+          width: 100%;
+        }
+        nav {
+          display: none;
+        }
+        .hero {
+          padding: 3rem 1rem;
+        }
+      }
+      /* ensure register form hidden initially */
+      #register-form {
+        display: none;
+      }
+      /* hide dashboards by default */
+      #doctor, #patient {
+        display: none;
+      }
+      /* chatbot messages */
+      .message {
+        margin: 5px 0;
+        padding: 8px;
+        border-radius: 8px;
+        max-width: 80%;
+        word-wrap: break-word;
+      }
+      .message.user {
+        background: var(--primary);
+        color: white;
+        margin-left: auto;
+        text-align: left;
+      }
+      .message.ai {
+        background: var(--light);
+        color: var(--dark);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- AUTH -->
+    <div id="auth-container">
+      <div class="auth-box">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+          "
+        >
+          <svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14H13v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V16H8.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5H12V8.5c0-.28.22-.5.5-.5s.5.22.5.5V15h3.5c.28 0 .5.22.5.5s-.22.5-.5.5z"
+            />
+          </svg>
+          <h2 style="margin: 0">Apna Aspatal</h2>
+        </div>
+
+        <form id="login-form" class="focus-glow">
+          <h3>Login</h3>
+          <input type="email" id="login-email" placeholder="Email" required class="hover-scale" autocomplete="email" onfocus="showEmailPrompt(this)" oncontextmenu="showEmailPrompt(this);return false;" ondblclick="showEmailPrompt(this)" onmouseover="showHoverPrompt(this, 'email')" />
+          <input type="password" id="login-password" placeholder="Password" required class="hover-scale" onmouseover="showHoverPrompt(this, 'password')" />
+          <select aria-label="role" class="hover-scale">
+            <option>Role: Patient</option>
+            <option>Role: Doctor</option>
+            <option>Role: Admin</option>
+          </select>
+          <div
+            style="
+              display: flex;
+              gap: 0.5rem;
+              justify-content: space-between;
+              align-items: center;
+              margin-top: 0.6rem;
+            "
+          >
+            <button class="btn hover-scale" type="submit">Login</button>
+            <button type="button" class="btn hover-scale" id="show-register">
+              Register
+            </button>
+          </div>
+          <p style="margin-top: 0.6rem; text-align: left">
+            <small
+              >Or <a href="#" id="show-register-link">Register here</a></small
+            >
+          </p>
+        </form>
+
+        <form id="register-form" class="focus-glow">
+          <h3>Register</h3>
+          <input type="text" placeholder="Full Name" required class="hover-scale" />
+          <input type="email" id="register-email" placeholder="Email" required class="hover-scale" onfocus="showEmailPrompt(this)" oncontextmenu="showEmailPrompt(this);return false;" ondblclick="showEmailPrompt(this)" onmouseover="showHoverPrompt(this, 'email')" />
+          <input type="password" id="register-password" placeholder="Password" required class="hover-scale" onmouseover="showHoverPrompt(this, 'password')" />
+          <select aria-label="role" class="hover-scale">
+            <option>Role: Patient</option>
+            <option>Role: Doctor</option>
+          </select>
+          <div
+            style="
+              display: flex;
+              gap: 0.5rem;
+              justify-content: space-between;
+              align-items: center;
+              margin-top: 0.6rem;
+            "
+          >
+            <button class="btn hover-scale" type="submit">Register</button>
+            <button type="button" class="btn hover-scale" id="show-login">
+              Back to Login
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <main id="app-container" style="display: none">
+      <header>
+        <div class="logo" onclick="window.location.reload()">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14H13v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V16H8.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5H12V8.5c0-.28.22-.5.5-.5s.5.22.5.5V15h3.5c.28 0 .5.22.5.5s-.22.5-.5.5z"
+            /></svg
+          ><span>Apna Aspatal</span>
+        </div>
+        <nav class="nav-hover">
+          <ul>
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#doctor">Doctors</a></li>
+            <li><a href="#patient">Patients</a></li>
+            <li><a href="#pharmacy">Pharmacy</a></li>
+            <li><a href="#lab">Lab Tests</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-controls">
+          <select class="lang-select" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+          </select>
+          <button class="toggle-btn" id="theme-toggle">Dark</button>
+          <button class="btn" id="logout-btn">Logout</button>
+        </div>
+      </header>
+
+      <section id="home" class="hero">
+        <h1 class="hero-stagger">Your Health, Our Priority.</h1>
+        <p class="hero-stagger" style="--order: 1;">Apna Aspatal – Your Digital Doorway to Quality Healthcare.</p>
+        <div class="search-bar focus-glow">
+          <select id="search-type" class="hover-scale">
+            <option value="doctor">Doctor</option>
+            <option value="specialist">Specialist</option>
+            <option value="hospital">Hospital</option>
+          </select>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Find a Doctor, Specialist, Hospital"
+            class="hover-scale"
+          />
+          <button class="btn hover-scale" id="search-btn">Search</button>
+        </div>
+        <div style="margin-top: 1rem">
+          <button class="btn hover-scale" id="book-appointment-btn">
+            Book Appointment
+          </button>
+          <button class="btn hover-scale" id="consult-online-btn">Consult Online</button>
+          <button class="btn btn-emergency pulse" id="emergency-btn">
+            Emergency Help
+          </button>
+        </div>
+
+        <div class="services-grid">
+          <div class="service-card hover-lift stagger depth-slide doctor-bg" style="--order: 1;" onclick="openDoctorConsultationModal()">
+            <h4>Doctor Consultation</h4>
+          </div>
+          <div class="service-card hover-lift stagger depth-slide pharmacy-bg" style="--order: 2;" onclick="openPharmacyModal()">
+            <h4>Pharmacy</h4>
+          </div>
+          <div class="service-card hover-lift stagger depth-slide diagnostic-bg" style="--order: 3;" onclick="openDiagnosticModal()">
+            <h4>Diagnostics</h4>
+          </div>
+          <div class="service-card hover-lift stagger depth-slide ambulance-bg" style="--order: 4;" onclick="openEmergencyModal()">
+            <h4>Ambulance</h4>
+          </div>
+        </div>
+      </section>
+
+      <section id="doctor" class="animate-on-scroll">
+        <h2>Doctor Dashboard</h2>
+        <div class="dashboard">
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Profile:</strong> Dr. Chauhan, Cardiologist
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Appointments:</strong> 5 upcoming today.
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Video Consult:</strong>
+            <a class="btn hover-scale" href="#">Start Next Call</a>
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Patient History:</strong>
+            <button class="btn hover-scale" onclick="alert('Loading patient records...')">
+              View Records
+            </button>
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Upcoming Bookings:</strong> 3 appointments scheduled for today
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Take Consultancy:</strong>
+            <button class="btn hover-scale" onclick="alert('Starting consultancy session...')">Start Session</button>
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>History of Patients:</strong>
+            <button class="btn hover-scale" onclick="alert('Viewing patient history...')">View History</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="patient" class="animate-on-scroll">
+        <h2>Patient Dashboard</h2>
+        <div class="dashboard">
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Upcoming Appointments:</strong> Dr. Chauhan - 4 PM Today
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>My Prescriptions:</strong>
+            <button
+              class="btn hover-scale"
+              onclick="alert('Downloading dummy_prescription.pdf...')"
+            >
+              Download
+            </button>
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Medical Reports:</strong>
+            <button
+              class="btn hover-scale"
+              onclick="alert('Downloading blood_report.pdf...')"
+            >
+              Download
+            </button>
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Book New Appointment:</strong>
+            <button class="btn hover-scale" onclick="openAppointmentOptions()">
+              Book Now
+            </button>
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>AI Symptom Checker:</strong>
+            <button class="btn hover-scale" onclick="openChatbot()">Ask Apna AI</button>
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Emergency SOS:</strong>
+            <button class="btn btn-emergency pulse" onclick="openEmergencyModal()">
+              Call Helpline
+            </button>
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Overview:</strong> Health Summary - Last checkup: Normal
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Upcoming Events:</strong> Health Camp on 15th Oct
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Notifications:</strong> New prescription available
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Booking History:</strong>
+            <button class="btn hover-scale" onclick="alert('Viewing booking history...')">View History</button>
+          </div>
+          <div class="card animate-on-scroll hover-scale">
+            <strong>Chat History:</strong>
+            <button class="btn hover-scale" onclick="alert('Viewing chat history...')">View Chats</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="pharmacy" class="animate-on-scroll">
+        <h2>Online Pharmacy</h2>
+        <input
+          type="text"
+          placeholder="Search for medicines..."
+          style="padding: 0.6rem; width: 320px"
+          class="focus-glow"
+        />
+        <div class="products" style="margin-top: 0.8rem">
+          <div class="product hover-lift stagger" style="--order: 1;">
+            Paracetamol<br /><strong>₹50</strong><br /><button
+              class="btn hover-scale"
+              onclick="addToCart('Paracetamol')"
+            >
+              Add to Cart
+            </button>
+          </div>
+          <div class="product hover-lift stagger" style="--order: 2;">
+            Aspirin<br /><strong>₹30</strong><br /><button
+              class="btn hover-scale"
+              onclick="addToCart('Aspirin')"
+            >
+              Add to Cart
+            </button>
+          </div>
+          <div class="product hover-lift stagger" style="--order: 3;">
+            Vitamin C<br /><strong>₹80</strong><br /><button
+              class="btn hover-scale"
+              onclick="addToCart('Vitamin C')"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        <div id="cart-status" style="margin-top: 0.6rem">
+          <span>Cart</span>: 0 items
+          <button class="btn hover-scale" onclick="checkout()">Checkout</button>
+        </div>
+      </section>
+
+      <section id="lab" class="animate-on-scroll">
+        <h2>Laboratory & Diagnostics</h2>
+        <form id="lab-test-form" class="focus-glow">
+          <h4>Book a Test</h4>
+          <select class="hover-scale">
+            <option>Complete Blood Count (CBC)</option>
+            <option>Thyroid Profile</option>
+            <option>Lipid Profile</option>
+          </select>
+          <button class="btn hover-scale" type="submit" style="margin-top: 0.6rem">
+            Book Home Collection
+          </button>
+        </form>
+      </section>
+
+      <section id="contact" class="animate-on-scroll">
+        <h2>Contact Us</h2>
+        <form id="contact-form" class="focus-glow">
+          <input placeholder="Name" required class="hover-scale" /><input
+            type="email"
+            placeholder="Email"
+            required
+            class="hover-scale"
+          /><textarea placeholder="Your Message..." required class="hover-scale"></textarea
+          ><button class="btn hover-scale" type="submit">Send Message</button>
+        </form>
+        <p style="margin-top: 0.8rem">
+          <strong>Helpline:</strong> 123-456-7890 |
+          <strong>Email:</strong> help@apnaaspatal.com
+        </p>
+      </section>
+
+      <footer>© 2025 Apna Aspatal. All Rights Reserved.</footer>
+    </main>
+
+    <button class="back-to-top" id="back-to-top">Top</button>
+
+    <!-- App Modals -->
+
+    <!-- Search Results -->
+    <div class="modal-overlay" id="search-overlay"></div>
+    <div class="modal small bounce-in" id="search-results-modal" aria-hidden="true">
+      <h3>Search Results</h3>
+      <div id="search-spinner" style="display: none">
+        <div class="spinner"></div>
+        <p style="text-align: center; margin-top: 0.4rem">
+          Fetching results...
+        </p>
+      </div>
+      <div
+        id="search-results"
+        style="display: grid; gap: 0.6rem; margin-top: 0.6rem"
+      ></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-search">Close</button>
+      </div>
+    </div>
+
+    <!-- Appointment Options Modal -->
+    <div class="modal-overlay" id="appointment-options-overlay"></div>
+    <div class="modal bounce-in" id="appointment-options-modal" aria-hidden="true">
+      <h3>Book Appointment - Choose</h3>
+      <div
+        style="
+          display: flex;
+          gap: 0.8rem;
+          flex-wrap: wrap;
+          justify-content: center;
+          margin-top: 0.6rem;
+        "
+      >
+        <div class="card fade-in hover-3d" style="min-width: 220px; text-align: center">
+          <h4>Physical Visit</h4>
+          <p>Describe symptoms → find specialists.</p>
+          <button class="btn hover-scale" id="physical-option-btn">
+            Physical Appointment
+          </button>
+        </div>
+        <div class="card fade-in hover-3d" style="min-width: 220px; text-align: center">
+          <h4>Consult Online</h4>
+          <p>Pay & schedule online consult.</p>
+          <button class="btn hover-scale" id="online-option-btn">Consult Online</button>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-appointment-options">Close</button>
+      </div>
+    </div>
+
+    <!-- Symptom Input Modal (for physical flow) -->
+    <div class="modal-overlay" id="symptom-overlay"></div>
+    <div class="modal bounce-in focus-glow" id="symptom-modal" aria-hidden="true">
+      <h3>Describe Your Symptoms</h3>
+      <textarea
+        id="symptom-text"
+        placeholder="e.g., chest pain, fever, skin rash..."
+        style="min-height: 100px"
+      ></textarea>
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+          margin-top: 0.5rem;
+        "
+      >
+        <button class="btn hover-scale" id="find-specialists-btn">Find Specialists</button>
+        <button class="btn hover-scale" id="close-symptom-modal">Close</button>
+      </div>
+    </div>
+
+    <!-- Specialist Results (after symptom analysis) -->
+    <div class="modal-overlay" id="specialist-overlay"></div>
+    <div class="modal bounce-in" id="specialist-modal" aria-hidden="true">
+      <h3>Suggested Specialists</h3>
+      <div
+        id="specialist-results"
+        style="display: grid; gap: 0.6rem; margin-top: 0.6rem"
+      ></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-specialist-modal">Close</button>
+      </div>
+    </div>
+
+    <!-- Consult Online Modal (list of online doctors) -->
+    <div class="modal-overlay" id="consult-overlay"></div>
+    <div class="modal bounce-in" id="consult-modal" aria-hidden="true">
+      <h3>Consult Online</h3>
+      <div
+        id="consult-list"
+        style="display: grid; gap: 0.6rem; margin-top: 0.6rem"
+      ></div>
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+          margin-top: 0.6rem;
+        "
+      >
+        <button class="btn hover-scale" id="close-consult-modal">Close</button>
+      </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="payment-overlay"></div>
+    <div class="modal small bounce-in focus-glow" id="payment-modal" aria-hidden="true">
+      <h3>Payment</h3>
+      <div id="payment-info" style="margin-top: 0.4rem"></div>
+      <div style="margin-top: 0.6rem">
+        <p><small>Enter mock payment details (this is a simulation).</small></p>
+        <input id="card-name" placeholder="Name on card" class="hover-scale" /><input
+          id="card-number"
+          placeholder="Card number"
+          class="hover-scale"
+        /><input id="card-exp" placeholder="MM/YY" class="hover-scale" />
+        <div
+          style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 0.6rem;
+          "
+        >
+          <button class="btn hover-scale" id="pay-now-btn">Pay & Schedule</button>
+          <button class="btn hover-scale" id="close-payment-btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency Modal -->
+    <div class="modal-overlay" id="emergency-overlay"></div>
+    <div class="modal small bounce-in" id="emergency-modal" aria-hidden="true">
+      <h3>Emergency Help</h3>
+      <p style="margin: 0.2rem 0">
+        <strong>Ambulance:</strong>
+        <a href="tel:102" id="ambulance-link" class="hover-scale">102</a>
+      </p>
+      <p style="margin: 0.2rem 0">
+        <strong>Emergency Service:</strong>
+        <a href="tel:108" id="emergency-link" class="hover-scale">108</a>
+      </p>
+      <p style="margin: 0.2rem 0">
+        <strong>Police:</strong> <a href="tel:100" id="police-link" class="hover-scale">100</a>
+      </p>
+      <p style="margin: 0.2rem 0">
+        <strong>SOS:</strong>
+        <a href="tel:+919999900000" id="sos-link" class="hover-scale">+91-99999-00000</a>
+      </p>
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+          margin-top: 0.6rem;
+        "
+      >
+        <button class="btn btn-emergency pulse" id="call-primary-btn">
+          Call Ambulance Now
+        </button>
+        <button class="btn hover-scale" id="close-emergency-btn">Close</button>
+      </div>
+    </div>
+
+    <!-- Appointment Booking Modal (scheduling) -->
+    <div class="modal-overlay" id="appointment-overlay"></div>
+    <div class="modal bounce-in focus-glow" id="appointment-modal" aria-hidden="true">
+      <h3>Schedule Appointment</h3>
+      <form id="appointment-form">
+        <input type="hidden" id="appointment-mode" value="physical" />
+        <label>Selected: <span id="appointment-selected">None</span></label>
+        <select id="doctor-select" style="margin-top: 0.5rem" class="hover-scale"></select>
+        <input
+          id="appointment-date"
+          type="date"
+          style="margin-top: 0.5rem"
+          required
+          class="hover-scale"
+        />
+        <input
+          id="appointment-time"
+          type="time"
+          style="margin-top: 0.5rem"
+          required
+          class="hover-scale"
+        />
+        <div
+          style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+          "
+        >
+          <button class="btn hover-scale" type="submit">Book</button>
+          <button class="btn hover-scale" type="button" id="close-appointment-modal">
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Doctor Consultation Modal -->
+    <div class="modal-overlay" id="doctor-consultation-overlay"></div>
+    <div class="modal bounce-in" id="doctor-consultation-modal" aria-hidden="true">
+      <h3>Doctor Consultation</h3>
+      <div style="display: grid; gap: 0.8rem;">
+        <button class="btn" onclick="bookAppointment()">Book Appointment</button>
+        <button class="btn" onclick="videoConsultation()">Video/Audio Consultation</button>
+        <button class="btn" onclick="chatWithDoctor()">Chat with Doctor</button>
+        <button class="btn" onclick="viewDoctorProfiles()">Doctor Profile & Reviews</button>
+        <button class="btn" onclick="shareHealthHistory()">Health History Sharing</button>
+        <button class="btn" onclick="consultationReminders()">Consultation Reminder Notifications</button>
+        <button class="btn" onclick="favoriteDoctors()">Favorite Doctors List</button>
+        <button class="btn" onclick="consultationHistory()">Consultation History</button>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-doctor-consultation">Close</button>
+      </div>
+    </div>
+
+    <!-- Book Appointment Sub Modal -->
+    <div class="modal-overlay" id="book-appointment-overlay"></div>
+    <div class="modal bounce-in" id="book-appointment-modal" aria-hidden="true">
+      <h3>Book Appointment</h3>
+      <div id="appointment-list" style="display: grid; gap: 0.8rem;"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-book-appointment">Close</button>
+      </div>
+    </div>
+
+    <!-- Video/Audio Consultation Sub Modal -->
+    <div class="modal-overlay" id="video-consult-overlay"></div>
+    <div class="modal bounce-in" id="video-consult-modal" aria-hidden="true">
+      <h3>Video/Audio Consultation</h3>
+      <div id="consult-list-doc" style="display: grid; gap: 0.8rem;"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-video-consult">Close</button>
+      </div>
+    </div>
+
+    <!-- Chat with Doctor Sub Modal -->
+    <div class="modal-overlay" id="chat-doctor-overlay"></div>
+    <div class="modal bounce-in" id="chat-doctor-modal" aria-hidden="true">
+      <h3>Chat with Doctor</h3>
+      <div id="chat-list" style="display: grid; gap: 0.8rem;"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-chat-doctor">Close</button>
+      </div>
+    </div>
+
+    <!-- Doctor Profiles Sub Modal -->
+    <div class="modal-overlay" id="profiles-overlay"></div>
+    <div class="modal bounce-in" id="profiles-modal" aria-hidden="true">
+      <h3>Doctor Profile & Reviews</h3>
+      <div id="profiles-list" style="display: grid; gap: 0.8rem;"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-profiles">Close</button>
+      </div>
+    </div>
+
+    <!-- Health History Sharing Sub Modal -->
+    <div class="modal-overlay" id="health-history-overlay"></div>
+    <div class="modal bounce-in" id="health-history-modal" aria-hidden="true">
+      <h3>Health History Sharing</h3>
+      <div id="health-history-list" style="display: grid; gap: 0.8rem;"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-health-history">Close</button>
+      </div>
+    </div>
+
+    <!-- Consultation Reminders Sub Modal -->
+    <div class="modal-overlay" id="reminders-overlay"></div>
+    <div class="modal bounce-in" id="reminders-modal" aria-hidden="true">
+      <h3>Consultation Reminder Notifications</h3>
+      <div id="reminders-list" style="display: grid; gap: 0.8rem;"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-reminders">Close</button>
+      </div>
+    </div>
+
+    <!-- Favorite Doctors Sub Modal -->
+    <div class="modal-overlay" id="favorites-overlay"></div>
+    <div class="modal bounce-in" id="favorites-modal" aria-hidden="true">
+      <h3>Favorite Doctors List</h3>
+      <div id="favorites-list" style="display: grid; gap: 0.8rem;"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-favorites">Close</button>
+      </div>
+    </div>
+
+    <!-- Consultation History Sub Modal -->
+    <div class="modal-overlay" id="history-overlay"></div>
+    <div class="modal bounce-in" id="history-modal" aria-hidden="true">
+      <h3>Consultation History</h3>
+      <div id="history-list" style="display: grid; gap: 0.8rem;"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-history">Close</button>
+      </div>
+    </div>
+
+    <!-- Pharmacy Modal -->
+    <div class="modal-overlay" id="pharmacy-overlay"></div>
+    <div class="modal bounce-in" id="pharmacy-modal" aria-hidden="true">
+      <h3>Pharmacy</h3>
+      <div style="display: grid; gap: 0.8rem;">
+        <button class="btn" onclick="searchMedicines()">Search & Order Medicines</button>
+        <button class="btn" onclick="uploadPrescription()">Prescription Upload</button>
+        <button class="btn" onclick="trackDelivery()">Medicine Delivery Tracking</button>
+        <button class="btn" onclick="setReminders()">Reminders for Medication</button>
+        <button class="btn" onclick="viewOffers()">Offers & Discounts</button>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-pharmacy">Close</button>
+      </div>
+    </div>
+
+    <!-- Reports & Prescription Modal -->
+    <div class="modal-overlay" id="reports-overlay"></div>
+    <div class="modal bounce-in" id="reports-modal" aria-hidden="true">
+      <h3>Reports & Prescription</h3>
+      <div style="display: grid; gap: 0.8rem;">
+        <button class="btn" onclick="uploadReports()">Upload & Store Reports</button>
+        <button class="btn" onclick="viewPastPrescriptions()">View Past Prescriptions</button>
+        <button class="btn" onclick="downloadShareReports()">Download & Share Reports</button>
+        <button class="btn" onclick="analyzeReports()">Automatic Report Analysis</button>
+        <button class="btn" onclick="prescriptionReminders()">Prescription Reminder</button>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-reports">Close</button>
+      </div>
+    </div>
+
+    <!-- Diagnostic Modal -->
+    <div class="modal-overlay" id="diagnostic-overlay"></div>
+    <div class="modal bounce-in" id="diagnostic-modal" aria-hidden="true">
+      <h3>Diagnostics</h3>
+      <div style="display: grid; gap: 0.8rem;">
+        <button class="btn" onclick="bookLabTests()">Book Lab Tests</button>
+        <button class="btn" onclick="viewTestPackages()">View Test Packages</button>
+        <button class="btn" onclick="homeSampleCollection()">Home Sample Collection</button>
+        <button class="btn" onclick="instantTestReports()">Instant Test Reports</button>
+        <button class="btn" onclick="compareReports()">Compare Reports</button>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-diagnostic">Close</button>
+      </div>
+    </div>
+
+    <!-- Doctor Profile Modal -->
+    <div class="modal-overlay" id="doctor-profile-overlay"></div>
+    <div class="modal bounce-in" id="doctor-profile-modal" aria-hidden="true">
+      <h3 id="doctor-profile-title">Doctor Profile</h3>
+      <div id="doctor-profile-content" style="display: grid; gap: 0.8rem; margin-top: 0.6rem;">
+        <!-- Populated by JS: specialization, experience, ratings, fav button -->
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem; gap: 0.5rem;">
+        <button class="btn hover-scale" id="mark-fav-btn">Mark as Favorite</button>
+        <button class="btn hover-scale" id="close-doctor-profile">Close</button>
+      </div>
+    </div>
+
+    <!-- Health History Sharing Modal -->
+    <div class="modal-overlay" id="health-history-sharing-overlay"></div>
+    <div class="modal bounce-in" id="health-history-sharing-modal" aria-hidden="true">
+      <h3>Health History Sharing</h3>
+      <div style="display: grid; gap: 1rem; margin-top: 0.6rem;">
+        <div>
+          <h4>Reports</h4>
+          <div id="reports-list" style="display: grid; gap: 0.4rem;"></div>
+        </div>
+        <div>
+          <h4>Prescriptions</h4>
+          <div id="prescriptions-list" style="display: grid; gap: 0.4rem;"></div>
+        </div>
+        <div>
+          <h4>Past Bills</h4>
+          <div id="bills-list" style="display: grid; gap: 0.4rem;"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-health-history-sharing">Close</button>
+      </div>
+    </div>
+
+    <!-- Consultancy History Modal -->
+    <div class="modal-overlay" id="consultancy-history-overlay"></div>
+    <div class="modal bounce-in" id="consultancy-history-modal" aria-hidden="true">
+      <h3>Consultancy History</h3>
+      <div style="display: grid; gap: 1rem; margin-top: 0.6rem;">
+        <div>
+          <h4>Previous Bookings</h4>
+          <div id="bookings-list" style="display: grid; gap: 0.4rem;"></div>
+        </div>
+        <div>
+          <h4>Hospitals Visited</h4>
+          <div id="hospitals-visited-list" style="display: grid; gap: 0.4rem;"></div>
+        </div>
+        <div>
+          <h4>Doctor Chats</h4>
+          <div id="chats-list" style="display: grid; gap: 0.4rem;"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-consultancy-history">Close</button>
+      </div>
+    </div>
+
+    <!-- AI Chatbot Modal -->
+    <div class="modal-overlay" id="chatbot-overlay"></div>
+    <div class="modal bounce-in" id="chatbot-modal" aria-hidden="true">
+      <h3>AI Symptom Checker</h3>
+      <div id="chat-messages" style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border); padding: 0.5rem; margin-bottom: 0.5rem; background: var(--white);"></div>
+      <div style="display: flex; gap: 0.5rem;">
+        <input type="text" id="chat-input" placeholder="Describe your symptoms..." style="flex: 1;" class="hover-scale" />
+        <button class="btn hover-scale" id="send-chat-btn">Send</button>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem">
+        <button class="btn hover-scale" id="close-chatbot">Close</button>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        /* ----------------------------
+       Dummy Data
+       ---------------------------- */
+        const doctors = [
+          {
+            id: 1,
+            name: "Dr. Rajesh Kumar",
+            specialty: "Cardiology",
+            location: "Delhi",
+            rating: 4.8,
+            online: true,
+            fee: 600,
+          },
+          {
+            id: 2,
+            name: "Dr. Priya Sharma",
+            specialty: "Dermatology",
+            location: "Mumbai",
+            rating: 4.9,
+            online: true,
+            fee: 400,
+          },
+          {
+            id: 3,
+            name: "Dr. Anil Gupta",
+            specialty: "Orthopedics",
+            location: "Bangalore",
+            rating: 4.7,
+            online: false,
+            fee: 450,
+          },
+          {
+            id: 4,
+            name: "Dr. Sunita Patel",
+            specialty: "Gynecology",
+            location: "Chennai",
+            rating: 4.6,
+            online: true,
+            fee: 350,
+          },
+          {
+            id: 5,
+            name: "Dr. Vikram Singh",
+            specialty: "Neurology",
+            location: "Pune",
+            rating: 4.5,
+            online: false,
+            fee: 700,
+          },
+          {
+            id: 6,
+            name: "Dr. Suresh Rao",
+            specialty: "General Physician",
+            location: "Delhi",
+            rating: 4.3,
+            online: true,
+            fee: 250,
+          },
+        ];
+
+        const hospitals = [
+          {
+            id: 101,
+            name: "City Care Hospital",
+            address: "MG Road",
+            phone: "011-555-0101",
+            distanceKm: 1.2,
+          },
+          {
+            id: 102,
+            name: "Green Valley Clinic",
+            address: "Sector 5",
+            phone: "011-555-0102",
+            distanceKm: 2.0,
+          },
+          {
+            id: 103,
+            name: "St. Marys Hospital",
+            address: "Central Park",
+            phone: "011-555-0103",
+            distanceKm: 3.8,
+          },
+        ];
+
+        const consultDoctors = doctors.filter((d) => d.online);
+
+        // Dummy data for doctor consultation features
+        const appointmentData = [
+          { id: 1, doctor: "Dr. Rajesh Kumar", specialty: "Cardiology", date: "2023-10-15", time: "10:00 AM" },
+          { id: 2, doctor: "Dr. Priya Sharma", specialty: "Dermatology", date: "2023-10-16", time: "2:00 PM" },
+          { id: 3, doctor: "Dr. Anil Gupta", specialty: "Orthopedics", date: "2023-10-17", time: "11:00 AM" },
+          { id: 4, doctor: "Dr. Sunita Patel", specialty: "Gynecology", date: "2023-10-18", time: "3:00 PM" },
+        ];
+
+        const consultationData = [
+          { id: 1, doctor: "Dr. Rajesh Kumar", specialty: "Cardiology", mode: "Video", date: "2023-10-15", time: "10:00 AM" },
+          { id: 2, doctor: "Dr. Priya Sharma", specialty: "Dermatology", mode: "Audio", date: "2023-10-16", time: "2:00 PM" },
+        ];
+
+        const chatData = [
+          { id: 1, doctor: "Dr. Rajesh Kumar", specialty: "Cardiology", status: "Online" },
+          { id: 2, doctor: "Dr. Priya Sharma", specialty: "Dermatology", status: "Offline" },
+        ];
+
+        const healthHistoryData = [
+          { id: 1, type: "Blood Test", date: "2023-09-01", result: "Normal" },
+          { id: 2, type: "X-Ray", date: "2023-08-15", result: "Clear" },
+          { id: 3, type: "Consultation", date: "2023-07-20", result: "Hypertension" },
+        ];
+
+        const remindersData = [
+          { id: 1, message: "Appointment with Dr. Rajesh Kumar on 2023-10-15 at 10:00 AM", type: "Appointment" },
+          { id: 2, message: "Medication: Aspirin daily at 8:00 AM", type: "Medication" },
+        ];
+
+        const favoritesData = [
+          { id: 1, doctor: "Dr. Rajesh Kumar", specialty: "Cardiology", rating: 4.8 },
+          { id: 2, doctor: "Dr. Priya Sharma", specialty: "Dermatology", rating: 4.9 },
+        ];
+
+        const historyData = [
+          { id: 1, doctor: "Dr. Rajesh Kumar", specialty: "Cardiology", date: "2023-09-10", mode: "Video" },
+          { id: 2, doctor: "Dr. Priya Sharma", specialty: "Dermatology", date: "2023-08-25", mode: "Chat" },
+        ];
+
+        // Additional dummy data for modals
+        const reportsData = [
+          { id: 1, type: "Blood Test", date: "2023-10-01", result: "Normal", file: "blood_test.pdf" },
+          { id: 2, type: "X-Ray Chest", date: "2023-09-15", result: "Clear", file: "xray_chest.pdf" },
+          { id: 3, type: "ECG", date: "2023-08-20", result: "Normal", file: "ecg_report.pdf" },
+        ];
+
+        const billsData = [
+          { id: 1, description: "Consultation Fee", amount: 500, date: "2023-10-01" },
+          { id: 2, description: "Lab Test", amount: 800, date: "2023-09-15" },
+          { id: 3, description: "Medicine", amount: 300, date: "2023-08-20" },
+        ];
+
+        const chatsData = [
+          { id: 1, doctor: "Dr. Rajesh Kumar", lastMessage: "Please take your medicine regularly.", time: "2 hours ago" },
+          { id: 2, doctor: "Dr. Priya Sharma", lastMessage: "Your test results are normal.", time: "1 day ago" },
+        ];
+
+        /* ----------------------------
+       Selectors
+       ---------------------------- */
+        const authContainer = document.getElementById("auth-container");
+        const appContainer = document.getElementById("app-container");
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+        const showRegisterBtn = document.getElementById("show-register");
+        const showRegisterLink = document.getElementById("show-register-link");
+        const showLoginBtn = document.getElementById("show-login");
+        const logoutBtn = document.getElementById("logout-btn");
+        const themeToggle = document.getElementById("theme-toggle");
+
+        /* ----------------------------
+       Auth - show register form properly
+       ---------------------------- */
+        function showRegisterForm() {
+          loginForm.style.display = "none";
+          registerForm.style.display = "block";
+        }
+        function showLoginForm() {
+          registerForm.style.display = "none";
+          loginForm.style.display = "block";
+        }
+        // initial: show login, hide register (CSS already)
+        showRegisterBtn.addEventListener("click", showRegisterForm);
+        showRegisterLink.addEventListener("click", function (e) {
+          e.preventDefault();
+          showRegisterForm();
+        });
+        showLoginBtn.addEventListener("click", showLoginForm);
+
+        // simple login/register handlers
+        loginForm.addEventListener("submit", function (e) {
+          try {
+            e.preventDefault();
+            const emailInput = document.getElementById('login-email');
+            if (!emailInput.value) {
+              alert('Please enter your email.');
+              emailInput.focus();
+              return;
+            }
+            const role = this.querySelector('select').value;
+            localStorage.setItem('userRole', role);
+            authContainer.style.display = "none";
+            appContainer.style.display = "block";
+            showRoleDashboard(role);
+          } catch (err) {
+            alert('An error occurred during login: ' + err.message);
+          }
+        });
+
+        function showRoleDashboard(role) {
+          if (role.includes('Patient')) {
+            document.getElementById('doctor').style.display = 'none';
+            document.getElementById('patient').style.display = 'block';
+          } else if (role.includes('Doctor')) {
+            document.getElementById('patient').style.display = 'none';
+            document.getElementById('doctor').style.display = 'block';
+          } else {
+            // admin or default
+            document.getElementById('doctor').style.display = 'none';
+            document.getElementById('patient').style.display = 'none';
+          }
+        }
+        registerForm.addEventListener("submit", function (e) {
+          try {
+            e.preventDefault();
+            const emailInput = document.getElementById('register-email');
+            if (!emailInput.value) {
+              alert('Please enter your email.');
+              emailInput.focus();
+              return;
+            }
+            alert("Registered successfully. Please login.");
+            showLoginForm();
+          } catch (err) {
+            alert('An error occurred during registration: ' + err.message);
+          }
+        });
+
+        logoutBtn.addEventListener("click", function () {
+          appContainer.style.display = "none";
+          authContainer.style.display = "block";
+        });
+
+        /* ----------------------------
+        Theme and language (basic)
+       ---------------------------- */
+        themeToggle.addEventListener("click", function () {
+          document.body.classList.toggle("dark-mode");
+          themeToggle.textContent = document.body.classList.contains(
+            "dark-mode"
+          )
+            ? "Light"
+            : "Dark";
+        });
+
+        window.changeLanguage = function (lang) {
+          // minimal language switch: example - can be extended
+          // This sample keeps original English; user can expand translations
+          console.log("language change to", lang);
+        };
+
+        /* ----------------------------
+       UI helpers: show/hide modals with animation
+       ---------------------------- */
+        function showModal(modalId, overlayId) {
+          const overlay = document.getElementById(overlayId);
+          const modal = document.getElementById(modalId);
+          overlay.style.display = "block";
+          modal.style.display = "block";
+          // force reflow for transition then add class
+          void modal.offsetWidth;
+          modal.classList.add("show");
+        }
+        function closeModal(modalId, overlayId) {
+          const overlay = document.getElementById(overlayId);
+          const modal = document.getElementById(modalId);
+          modal.classList.remove("show");
+          setTimeout(() => {
+            modal.style.display = "none";
+            overlay.style.display = "none";
+          }, 260);
+        }
+
+        /* ----------------------------
+       Pharmacy cart & forms
+       ---------------------------- */
+        let cartCount = 0;
+        window.addToCart = function (item) {
+          cartCount++;
+          document.getElementById(
+            "cart-status"
+          ).innerHTML = `<span>Cart</span>: ${cartCount} items <button class="btn" onclick="checkout()">Checkout</button>`;
+          if (!performance.navigation || performance.navigation.type !== 1) alert(item + " added to cart");
+        };
+        window.checkout = function () {
+          if (cartCount > 0) {
+            if (!performance.navigation || performance.navigation.type !== 1) alert("Checkout complete for " + cartCount + " items.");
+            cartCount = 0;
+            document.getElementById(
+              "cart-status"
+            ).innerHTML = `<span>Cart</span>: ${cartCount} items <button class="btn" onclick="checkout()">Checkout</button>`;
+          } else if (!performance.navigation || performance.navigation.type !== 1) alert("Your cart is empty.");
+        };
+
+        document
+          .getElementById("contact-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            if (!performance.navigation || performance.navigation.type !== 1) alert("Thank you for your message!");
+            this.reset();
+          });
+        document
+          .getElementById("lab-test-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            if (!performance.navigation || performance.navigation.type !== 1) alert("Your request for home collection has been received.");
+            this.reset();
+          });
+
+        /* ----------------------------
+       Chatbot
+       ---------------------------- */
+        function openChatbot() {
+          showModal("chatbot-modal", "chatbot-overlay");
+        }
+        window.openChatbot = openChatbot;
+
+        // Chatbot send message functionality
+        document.getElementById("send-chat-btn").addEventListener("click", sendChatMessage);
+        document.getElementById("chat-input").addEventListener("keydown", function(e) {
+          if (e.key === "Enter") {
+            sendChatMessage();
+          }
+        });
+
+        function sendChatMessage() {
+          const input = document.getElementById("chat-input");
+          const message = input.value.trim();
+          if (!message) return;
+          appendMessage("user", message);
+          input.value = "";
+          // Simulate AI response after delay
+          setTimeout(() => {
+            const response = getAIResponse(message);
+            appendMessage("ai", response);
+          }, 1000);
+        }
+
+        function appendMessage(type, text) {
+          const messagesDiv = document.getElementById("chat-messages");
+          const messageDiv = document.createElement("div");
+          messageDiv.className = `message ${type}`;
+          messageDiv.textContent = text;
+          messagesDiv.appendChild(messageDiv);
+          messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto scroll to bottom
+        }
+
+        function getAIResponse(userMessage) {
+          const specialty = analyzeSymptoms(userMessage);
+          if (specialty === "General Physician") {
+            return "Based on your symptoms, it seems like a general check-up might be needed. Please consult a General Physician for accurate diagnosis.";
+          } else {
+            return `Based on your symptoms, you may need to consult a ${specialty} specialist. Please book an appointment or describe more details for better advice.`;
+          }
+        }
+
+        /* ----------------------------
+       SEARCH - animated modal + results
+       ---------------------------- */
+        const searchBtn = document.getElementById("search-btn");
+        searchBtn.addEventListener("click", performSearch);
+        document
+          .getElementById("close-search")
+          .addEventListener("click", function () {
+            closeModal("search-results-modal", "search-overlay");
+          });
+
+        function performSearch() {
+          const type = document.getElementById("search-type").value;
+          const query = (document.getElementById("search-input").value || "")
+            .toLowerCase()
+            .trim();
+          const resultsDiv = document.getElementById("search-results");
+          const spinner = document.getElementById("search-spinner");
+
+          resultsDiv.innerHTML = "";
+          spinner.style.display = "block";
+          showModal("search-results-modal", "search-overlay");
+
+          setTimeout(() => {
+            spinner.style.display = "none";
+            let results = [];
+            if (type === "doctor") {
+              results = doctors.filter(
+                (d) =>
+                  d.name.toLowerCase().includes(query) ||
+                  d.specialty.toLowerCase().includes(query) ||
+                  d.location.toLowerCase().includes(query)
+              );
+            } else if (type === "specialist") {
+              results = doctors.filter((d) =>
+                d.specialty.toLowerCase().includes(query)
+              );
+            } else {
+              results = hospitals.filter(
+                (h) =>
+                  h.name.toLowerCase().includes(query) ||
+                  h.address.toLowerCase().includes(query)
+              );
+            }
+
+            if (results.length === 0) {
+              resultsDiv.innerHTML = '<p class="fade-in">No results found.</p>';
+            } else {
+              results.forEach((r) => {
+                const node = document.createElement("div");
+                node.className = "card slide-up";
+                if (type === "doctor") {
+                  node.innerHTML = `<strong>${r.name}</strong><br>Specialty: ${r.specialty}<br>Location: ${r.location}<br>Rating: ${r.rating}<br><div style="margin-top:6px"><button class="btn" onclick="openAppointmentFor('${r.id}')">Book</button> <button class="btn" onclick="openConsultFor('${r.id}')">Consult</button></div>`;
+                } else if (type === "specialist") {
+                  node.innerHTML = `<strong>${r.specialty}</strong><br>See available doctors<br><div style="margin-top:6px"><button class="btn" onclick="filterBySpecialty('${r.specialty}')">View Doctors</button></div>`;
+                } else {
+                  node.innerHTML = `<strong>${r.name}</strong><br>${r.address}<br><div style="margin-top:6px"><button class="btn" onclick="openNearbyHospital('${r.id}')">View</button></div>`;
+                }
+                resultsDiv.appendChild(node);
+              });
+            }
+          }, 800);
+        }
+
+        /* ----------------------------
+       Appointment options & flows
+       ---------------------------- */
+        const bookAppointmentBtn = document.getElementById(
+          "book-appointment-btn"
+        );
+        const consultOnlineBtn = document.getElementById("consult-online-btn");
+        const emergencyBtn = document.getElementById("emergency-btn");
+
+        bookAppointmentBtn.addEventListener("click", function () {
+          showModal("appointment-options-modal", "appointment-options-overlay");
+        });
+        document
+          .getElementById("close-appointment-options")
+          .addEventListener("click", function () {
+            closeModal(
+              "appointment-options-modal",
+              "appointment-options-overlay"
+            );
+          });
+
+        // When user chooses physical appointment
+        document
+          .getElementById("physical-option-btn")
+          .addEventListener("click", function () {
+            // close options and open symptom modal
+            closeModal(
+              "appointment-options-modal",
+              "appointment-options-overlay"
+            );
+            showModal("symptom-modal", "symptom-overlay");
+          });
+
+        // When user chooses online option from appointment options -> open consult modal
+        document
+          .getElementById("online-option-btn")
+          .addEventListener("click", function () {
+            closeModal(
+              "appointment-options-modal",
+              "appointment-options-overlay"
+            );
+            populateConsultList(consultDoctors);
+            showModal("consult-modal", "consult-overlay");
+          });
+
+        // Symptom modal actions
+        document
+          .getElementById("close-symptom-modal")
+          .addEventListener("click", function () {
+            closeModal("symptom-modal", "symptom-overlay");
+          });
+        document
+          .getElementById("find-specialists-btn")
+          .addEventListener("click", function () {
+            const text = document.getElementById("symptom-text").value || "";
+            if (!text.trim()) {
+              if (!performance.navigation || performance.navigation.type !== 1) alert("Please describe your symptoms");
+              return;
+            }
+            // analyze symptoms to derive specialty
+            const specialty = analyzeSymptoms(text);
+            // find doctors matching specialty
+            const matched = doctors.filter(
+              (d) =>
+                d.specialty.toLowerCase().includes(specialty.toLowerCase()) ||
+                (specialty === "General Physician" &&
+                  d.specialty.toLowerCase().includes("general"))
+            );
+            // show results in specialist modal
+            populateSpecialistResults(
+              matched.length
+                ? matched
+                : doctors.filter((d) =>
+                    d.specialty.toLowerCase().includes("general")
+                  )
+            );
+            closeModal("symptom-modal", "symptom-overlay");
+            showModal("specialist-modal", "specialist-overlay");
+          });
+
+        // Close specialist modal
+        document
+          .getElementById("close-specialist-modal")
+          .addEventListener("click", function () {
+            closeModal("specialist-modal", "specialist-overlay");
+          });
+
+        function analyzeSymptoms(text) {
+          text = text.toLowerCase();
+          if (/chest|heart|cardiac|breath|angina/.test(text))
+            return "Cardiology";
+          if (/skin|rash|itch|acne|eczema/.test(text)) return "Dermatology";
+          if (/joint|bone|knee|back|shoulder/.test(text)) return "Orthopedics";
+          if (/period|preg|pregnancy|vaginal|uterus/.test(text))
+            return "Gynecology";
+          if (/headache|migraine|seizure|dizzy|neuro/.test(text))
+            return "Neurology";
+          if (/stomach|abdominal|nausea|vomit|diarrhea|gastric|pain/.test(text))
+            return "Gastroenterology";
+          if (/fever|cold|cough|body ache|flu/.test(text))
+            return "General Physician";
+          return "General Physician";
+        }
+
+        function populateSpecialistResults(list) {
+          const container = document.getElementById("specialist-results");
+          container.innerHTML = "";
+          list.forEach((d) => {
+            const el = document.createElement("div");
+            el.className = "card fade-in";
+            el.innerHTML = `<strong>${d.name}</strong><br>${d.specialty} • ${d.location} • Rating: ${d.rating}<br><div style="margin-top:6px"><button class="btn" onclick="openAppointmentFor('${d.id}')">Book Physical Visit</button> <button class="btn" onclick="callNumber('${d.id}')">Call</button></div>`;
+            container.appendChild(el);
+          });
+        }
+
+        /* ----------------------------
+       Appointment Modal (scheduling)
+       ---------------------------- */
+        document
+          .getElementById("close-appointment-modal")
+          .addEventListener("click", function () {
+            closeModal("appointment-modal", "appointment-overlay");
+          });
+        document
+          .getElementById("appointment-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            const mode = document.getElementById("appointment-mode").value;
+            const selected = document.getElementById(
+              "appointment-selected"
+            ).textContent;
+            const date = document.getElementById("appointment-date").value;
+            const time = document.getElementById("appointment-time").value;
+            if (!date || !time) {
+              if (!performance.navigation || performance.navigation.type !== 1) alert("Please select date and time");
+              return;
+            }
+            alert(
+              `Appointment confirmed (${mode}): ${selected} on ${date} at ${time}`
+            );
+            closeModal("appointment-modal", "appointment-overlay");
+            this.reset();
+          });
+
+        // helper to open appointment modal prefilled for a doctor id (string id passed)
+        window.openAppointmentFor = function (doctorId) {
+          // doctorId might be numeric string; find doctor
+          const doc = doctors.find((d) => String(d.id) === String(doctorId));
+          const select = document.getElementById("doctor-select");
+          select.innerHTML = "";
+          if (doc) {
+            const opt = document.createElement("option");
+            opt.value = doc.id;
+            opt.textContent = `${doc.name} - ${doc.specialty} (${doc.location})`;
+            select.appendChild(opt);
+            document.getElementById("appointment-selected").textContent =
+              doc.name + " (" + doc.specialty + ")";
+          } else {
+            // fallback: list all doctors
+            doctors.forEach((d) => {
+              const o = document.createElement("option");
+              o.value = d.id;
+              o.textContent = `${d.name} - ${d.specialty} (${d.location})`;
+              select.appendChild(o);
+            });
+            document.getElementById("appointment-selected").textContent =
+              "Select Doctor";
+          }
+          document.getElementById("appointment-mode").value = "physical";
+          showModal("appointment-modal", "appointment-overlay");
+        };
+
+        // call number helper (simulated)
+        function callNumber(idOrPhone) {
+          // If id provided, try map to phone of hospital or doctor (we don't have doctor phone in dummy, so alert)
+          alert("In a real app this would initiate a call. (Simulated)");
+        }
+        window.callNumber = callNumber;
+
+        /* ----------------------------
+       Consult Online flow with payment -> schedule
+       ---------------------------- */
+        consultOnlineBtn.addEventListener("click", function () {
+          populateConsultList(consultDoctors);
+          showModal("consult-modal", "consult-overlay");
+        });
+
+        document
+          .getElementById("close-consult-modal")
+          .addEventListener("click", function () {
+            closeModal("consult-modal", "consult-overlay");
+          });
+
+        function populateConsultList(list) {
+          const container = document.getElementById("consult-list");
+          container.innerHTML = "";
+          list.forEach((d) => {
+            const el = document.createElement("div");
+            el.className = "card fade-in";
+            el.innerHTML = `<strong>${d.name}</strong><br>${d.specialty} • ${d.location} • Rating: ${d.rating} • Fee: ₹${d.fee}<br><div style="margin-top:6px"><button class="btn" onclick="initiateConsultPayment('${d.id}','video')">Video Call</button> <button class="btn" onclick="initiateConsultPayment('${d.id}','chat')">Chat</button></div>`;
+            container.appendChild(el);
+          });
+        }
+
+        // open payment modal with doctor info and mode video/chat
+        window.initiateConsultPayment = function (docId, mode) {
+          const doc = doctors.find((d) => String(d.id) === String(docId));
+          if (!doc) {
+            alert("Doctor not found");
+            return;
+          }
+          // show payment modal and set details
+          document.getElementById(
+            "payment-info"
+          ).innerHTML = `<strong>${doc.name}</strong><br>${doc.specialty} • Fee: ₹${doc.fee}<br><small>Mode: ${mode}</small>`;
+          document.getElementById("payment-modal").dataset.docId = doc.id;
+          document.getElementById("payment-modal").dataset.mode = mode;
+          showModal("payment-modal", "payment-overlay");
+        };
+
+        // payment close
+        document
+          .getElementById("close-payment-btn")
+          .addEventListener("click", function () {
+            closeModal("payment-modal", "payment-overlay");
+          });
+
+        // Pay & Schedule
+        document
+          .getElementById("pay-now-btn")
+          .addEventListener("click", function () {
+            const docId =
+              document.getElementById("payment-modal").dataset.docId;
+            const mode =
+              document.getElementById("payment-modal").dataset.mode || "video";
+            // simulate payment processing
+            this.disabled = true;
+            this.textContent = "Processing...";
+            setTimeout(() => {
+              alert("Payment successful!");
+              // after payment, schedule appointment
+              // prefill appointment modal with doctor and set mode to 'online'
+              const doc = doctors.find((d) => String(d.id) === String(docId));
+              const select = document.getElementById("doctor-select");
+              select.innerHTML = "";
+              const opt = document.createElement("option");
+              opt.value = doc.id;
+              opt.textContent = `${doc.name} - ${doc.specialty} (${doc.location})`;
+              select.appendChild(opt);
+              document.getElementById("appointment-selected").textContent =
+                doc.name + " (Online - " + mode + ")";
+              document.getElementById("appointment-mode").value = "online";
+              closeModal("payment-modal", "payment-overlay");
+              showModal("appointment-modal", "appointment-overlay");
+              // reset pay button
+              document.getElementById("pay-now-btn").disabled = false;
+              document.getElementById("pay-now-btn").textContent =
+                "Pay & Schedule";
+            }, 900);
+          });
+
+        /* ----------------------------
+       Emergency help -> direct dial
+       ---------------------------- */
+        emergencyBtn.addEventListener("click", function () {
+          // open emergency modal showing numbers plus direct call option
+          showModal("emergency-modal", "emergency-overlay");
+        });
+        document
+          .getElementById("close-emergency-btn")
+          .addEventListener("click", function () {
+            closeModal("emergency-modal", "emergency-overlay");
+          });
+        document
+          .getElementById("call-primary-btn")
+          .addEventListener("click", function () {
+            // Use tel: link to attempt opening device dialer
+            window.location.href = "tel:102";
+          });
+
+        // helper to open nearby hospital
+        window.openNearbyHospital = function (id) {
+          const hosp = hospitals.find((h) => String(h.id) === String(id));
+          if (hosp)
+            alert(
+              `Hospital: ${hosp.name}\nAddress: ${hosp.address}\nPhone: ${hosp.phone}`
+            );
+        };
+
+        // open consult directly from search results for a doctor id
+        window.openConsultFor = function (docId) {
+          const doc = doctors.find((d) => String(d.id) === String(docId));
+          if (!doc) {
+            alert("Doctor not found");
+            return;
+          }
+          // if online doctor, open payment flow directly
+          if (doc.online) {
+            initiateConsultPayment(doc.id, "video");
+          } else {
+            alert(
+              "This doctor is not available for online consult. Please book a physical visit."
+            );
+            openAppointmentFor(doc.id);
+          }
+        };
+
+        // filter by specialty helper
+        window.filterBySpecialty = function (specialty) {
+          document.getElementById("search-input").value = specialty;
+          document.getElementById("search-type").value = "doctor";
+          performSearch();
+        };
+
+        /* ----------------------------
+       Specialists helper: ensure consult list is present
+       ---------------------------- */
+        // initial hooks
+        document
+          .getElementById("close-search")
+          .addEventListener("click", function () {
+            closeModal("search-results-modal", "search-overlay");
+          });
+
+        /* ----------------------------
+       Back to top and nav active
+       ---------------------------- */
+        const backToTopBtn = document.getElementById("back-to-top");
+        window.addEventListener("scroll", function () {
+          backToTopBtn.style.display = window.scrollY > 300 ? "block" : "none";
+        });
+        backToTopBtn.addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // smooth inits
+        // ensure modals closed initially
+        [
+          "search-results-modal",
+          "appointment-options-modal",
+          "symptom-modal",
+          "specialist-modal",
+          "consult-modal",
+          "payment-modal",
+          "emergency-modal",
+          "appointment-modal",
+          "doctor-consultation-modal",
+          "pharmacy-modal",
+          "reports-modal",
+          "diagnostic-modal",
+        ].forEach((id) => {
+          const m = document.getElementById(id);
+          if (m) m.style.display = "none";
+        });
+        [
+          "search-overlay",
+          "appointment-options-overlay",
+          "symptom-overlay",
+          "specialist-overlay",
+          "consult-overlay",
+          "payment-overlay",
+          "emergency-overlay",
+          "appointment-overlay",
+          "doctor-consultation-overlay",
+          "pharmacy-overlay",
+          "reports-overlay",
+          "diagnostic-overlay",
+        ].forEach((id) => {
+          const o = document.getElementById(id);
+          if (o) o.style.display = "none";
+        });
+
+        // Expose some functions to global scope for inline handlers
+        window.openAppointmentOptions = function () {
+          showModal("appointment-options-modal", "appointment-options-overlay");
+        };
+        window.openConsultModal = function () {
+          populateConsultList(consultDoctors);
+          showModal("consult-modal", "consult-overlay");
+        };
+        window.openEmergencyModal = function () {
+          showModal("emergency-modal", "emergency-overlay");
+        };
+        window.openChatbot = openChatbot;
+
+        // New modal open functions
+        window.openDoctorConsultationModal = function () {
+          showModal("doctor-consultation-modal", "doctor-consultation-overlay");
+        };
+        window.openPharmacyModal = function () {
+          showModal("pharmacy-modal", "pharmacy-overlay");
+        };
+        window.openDiagnosticModal = function () {
+          showModal("diagnostic-modal", "diagnostic-overlay");
+        };
+
+        // Close handlers for new modals
+        document.getElementById("close-doctor-consultation").addEventListener("click", function () {
+          closeModal("doctor-consultation-modal", "doctor-consultation-overlay");
+        });
+        document.getElementById("close-book-appointment").addEventListener("click", function () {
+          closeModal("book-appointment-modal", "book-appointment-overlay");
+        });
+        document.getElementById("close-video-consult").addEventListener("click", function () {
+          closeModal("video-consult-modal", "video-consult-overlay");
+        });
+        document.getElementById("close-chat-doctor").addEventListener("click", function () {
+          closeModal("chat-doctor-modal", "chat-doctor-overlay");
+        });
+        document.getElementById("close-profiles").addEventListener("click", function () {
+          closeModal("profiles-modal", "profiles-overlay");
+        });
+        document.getElementById("close-health-history").addEventListener("click", function () {
+          closeModal("health-history-modal", "health-history-overlay");
+        });
+        document.getElementById("close-reminders").addEventListener("click", function () {
+          closeModal("reminders-modal", "reminders-overlay");
+        });
+        document.getElementById("close-favorites").addEventListener("click", function () {
+          closeModal("favorites-modal", "favorites-overlay");
+        });
+        document.getElementById("close-history").addEventListener("click", function () {
+          closeModal("history-modal", "history-overlay");
+        });
+        document.getElementById("close-pharmacy").addEventListener("click", function () {
+          closeModal("pharmacy-modal", "pharmacy-overlay");
+        });
+        document.getElementById("close-reports").addEventListener("click", function () {
+          closeModal("reports-modal", "reports-overlay");
+        });
+        document.getElementById("close-diagnostic").addEventListener("click", function () {
+          closeModal("diagnostic-modal", "diagnostic-overlay");
+        });
+
+        // Placeholder functions for modal buttons
+        window.bookAppointment = function () {
+          showModal('book-appointment-modal', 'book-appointment-overlay');
+          document.getElementById('appointment-list').innerHTML = '<div class="card">Dr. Rajesh Kumar - Cardiology - 10:00 AM, 15 Oct</div><div class="card">Dr. Priya Sharma - Dermatology - 2:00 PM, 16 Oct</div>';
+        };
+        window.videoConsultation = function () {
+          showModal('video-consult-modal', 'video-consult-overlay');
+          document.getElementById('consult-list-doc').innerHTML = '<div class="card">Video Call with Dr. Rajesh Kumar</div><div class="card">Audio Call with Dr. Priya Sharma</div>';
+        };
+        window.chatWithDoctor = function () {
+          showModal('chat-doctor-modal', 'chat-doctor-overlay');
+          document.getElementById('chat-list').innerHTML = '<div class="card">Chat with Dr. Rajesh Kumar: "Please take your medicine regularly."</div><div class="card">Chat with Dr. Priya Sharma: "Your test results are normal."</div>';
+        };
+        window.viewDoctorProfiles = function () {
+          showModal('profiles-modal', 'profiles-overlay');
+          document.getElementById('profiles-list').innerHTML = '<div class="card">Dr. Rajesh Kumar - Cardiology - 4.8⭐</div><div class="card">Dr. Priya Sharma - Dermatology - 4.9⭐</div>';
+        };
+        window.shareHealthHistory = function () {
+          showModal('health-history-modal', 'health-history-overlay');
+          document.getElementById('health-history-list').innerHTML = '<div class="card">Blood Test - 01 Oct 2023 - Normal</div><div class="card">X-Ray - 15 Sep 2023 - Clear</div>';
+        };
+        window.searchMedicines = function () {
+          showModal('pharmacy-modal', 'pharmacy-overlay');
+        };
+        window.uploadPrescription = function () {
+          showModal('reports-modal', 'reports-overlay');
+        };
+        window.trackDelivery = function () {
+          alert('Medicine delivery is in progress. Expected delivery: Tomorrow.');
+        };
+        window.setReminders = function () {
+          showModal('reminders-modal', 'reminders-overlay');
+          document.getElementById('reminders-list').innerHTML = '<div class="card">Aspirin daily at 8:00 AM</div>';
+        };
+        window.viewOffers = function () {
+          alert('Current offer: 10% off on all medicines!');
+        };
+        window.uploadReports = function () {
+          showModal('reports-modal', 'reports-overlay');
+        };
+        window.viewPastPrescriptions = function () {
+          showModal('reports-modal', 'reports-overlay');
+        };
+        window.downloadShareReports = function () {
+          alert('Reports downloaded and shared successfully.');
+        };
+        window.analyzeReports = function () {
+          alert('Report analysis: All results normal.');
+        };
+        window.prescriptionReminders = function () {
+          showModal('reminders-modal', 'reminders-overlay');
+        };
+        window.bookLabTests = function () {
+          showModal('diagnostic-modal', 'diagnostic-overlay');
+        };
+        window.viewTestPackages = function () {
+          showModal('diagnostic-modal', 'diagnostic-overlay');
+        };
+        window.homeSampleCollection = function () {
+          alert('Home sample collection scheduled for tomorrow.');
+        };
+        window.instantTestReports = function () {
+          alert('Instant test reports: All values within normal range.');
+        };
+        window.compareReports = function () {
+          alert('Comparison: No significant changes detected.');
+        };
+
+        /* ----------------------------
+       New Animation Enhancements
+       ---------------------------- */
+
+        // IntersectionObserver for scroll animations
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, observerOptions);
+
+        // Observe all animate-on-scroll elements
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+          observer.observe(el);
+        });
+
+        // Set --order for stagger elements
+        document.querySelectorAll('.stagger').forEach((el, index) => {
+          el.style.setProperty('--order', index);
+        });
+
+        // Trigger initial hero stagger (ensure animations start)
+        setTimeout(() => {
+          document.querySelectorAll('.hero-stagger').forEach(el => {
+            el.style.opacity = '1'; // Ensure visible after animation
+          });
+        }, 2000); // After animation duration
+
+        // Handle dynamic content animations (for modals or added elements)
+        window.observeNewElements = function(selector) {
+          document.querySelectorAll(selector).forEach(el => {
+            if (!el.classList.contains('observed')) {
+              if (el.classList.contains('animate-on-scroll')) {
+                observer.observe(el);
+                loginForm.addEventListener("submit", function (e) {
+                  try {
+                    e.preventDefault();
+                    const emailInput = document.getElementById('login-email');
+                    if (!emailInput.value) {
+                      alert('Please enter your email.');
+                      emailInput.focus();
+                      return;
+                    }
+                    // ...existing login logic...
+                  } catch (err) {
+                    alert('An error occurred during login: ' + err.message);
+                  }
+                });
+                
+                registerForm.addEventListener("submit", function (e) {
+                  try {
+                    e.preventDefault();
+                    const emailInput = document.getElementById('register-email');
+                    if (!emailInput.value) {
+                      alert('Please enter your email.');
+                      emailInput.focus();
+                      return;
+                    }
+                    // ...existing register logic...
+                  } catch (err) {
+                    alert('An error occurred during registration: ' + err.message);
+                  }
+                });
+              }
+              el.classList.add('observed');
+            }
+          });
+        };
+
+        // For modals, bounce-in is handled via CSS on .show class
+      });
+    </script>
+    <script>
+function showEmailPrompt(input) {
+  if (!input.value) {
+    let modal = document.getElementById('email-prompt-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'email-prompt-modal';
+      modal.style.position = 'fixed';
+      modal.style.left = '50%';
+      modal.style.top = '50%';
+      modal.style.transform = 'translate(-50%, -50%)';
+      modal.style.background = '#fff';
+      modal.style.color = '#333';
+      modal.style.padding = '18px 32px';
+      modal.style.borderRadius = '10px';
+      modal.style.boxShadow = '0 8px 32px rgba(0,0,0,0.18)';
+      modal.style.fontSize = '1.1em';
+      modal.style.zIndex = '3000';
+      modal.classList.add('hover-scale', 'bounce-in');
+      modal.innerHTML = '<b>Please enter your email to continue.</b><br><button style="margin-top:12px;padding:6px 18px;border-radius:6px;background:#007bff;color:#fff;border:none;cursor:pointer;" onclick="closeEmailPrompt()">OK</button>';
+      document.body.appendChild(modal);
+    }
+    input.focus();
+  }
+}
+function closeEmailPrompt() {
+  var modal = document.getElementById('email-prompt-modal');
+  if (modal) modal.remove();
+}
+function showHoverPrompt(input, type) {
+  let tipId = input.id + '-hover-tip';
+  let tip = document.getElementById(tipId);
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.id = tipId;
+    tip.className = 'hover-scale bounce-in';
+    tip.style.position = 'absolute';
+    tip.style.background = '#ffc';
+    tip.style.color = '#333';
+    tip.style.padding = '6px 16px';
+    tip.style.borderRadius = '8px';
+    tip.style.fontSize = '1em';
+    tip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+    tip.style.zIndex = '2000';
+    tip.textContent = type === 'email' ? 'Please enter your email.' : 'Please enter your password.';
+    input.parentNode.appendChild(tip);
+    // Position below input
+    const rect = input.getBoundingClientRect();
+    tip.style.left = input.offsetLeft + 'px';
+    tip.style.top = (input.offsetTop + input.offsetHeight + 2) + 'px';
+  }
+  input.addEventListener('mouseout', function() {
+    let tip = document.getElementById(tipId);
+    if (tip) tip.remove();
+  });
+}
+['login-email','register-email','login-password','register-password'].forEach(function(id){
+  var el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('blur', function(){
+      closeEmailPrompt();
+      let tip = document.getElementById(id + '-hover-tip');
+      if (tip) tip.remove();
+    });
+  }
+});
+</script>
+  </body>
+</html>
